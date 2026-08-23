@@ -25,7 +25,7 @@ function CurrentAnswer({ guest }: { guest: PublicGuest }) {
   return (
     <div className="mt-6 inline-flex items-center gap-2.5 rounded-full border border-gold/40 bg-white/70 px-5 py-2.5">
       <Heart className="h-3.5 w-3.5 text-gold-deep" />
-      <span className="font-sans text-[0.66rem] tracking-[0.16em] text-ink-soft">{text}</span>
+      <span className="font-sans text-[0.9rem] tracking-[0.16em] text-ink-soft">{text}</span>
     </div>
   );
 }
@@ -51,7 +51,12 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
         <motion.h2
           className="mt-6 font-script text-5xl text-gilded animate-shimmer sm:text-6xl"
           initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
-          whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          whileInView={{
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            transitionEnd: { filter: "none" },
+          }}
           viewport={inViewOnce}
           transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
         >
@@ -59,7 +64,7 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
         </motion.h2>
 
         <Reveal delay={0.25}>
-          <p className="mt-4 font-sans text-[0.68rem] tracking-[0.36em] text-ink-soft uppercase">
+          <p className="mt-4 font-sans text-[0.92rem] tracking-[0.36em] text-ink-soft uppercase">
             {wedding.copy.rsvp.subtitle}
           </p>
         </Reveal>
@@ -81,7 +86,7 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
             </Reveal>
 
             <Reveal delay={0.65}>
-              <p className="mt-8 max-w-xs font-sans text-xs leading-relaxed text-ink-faint">
+              <p className="mt-8 max-w-xs font-sans text-[0.95rem] leading-relaxed text-ink-faint">
                 {wedding.copy.rsvp.deadlineNote}
               </p>
             </Reveal>
@@ -94,7 +99,7 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
               <p className="font-serif text-lg leading-relaxed font-light text-ink-soft italic">
                 Para confirmar tu asistencia, abre el enlace personal que te enviamos.
               </p>
-              <p className="mt-3 font-sans text-xs leading-relaxed text-ink-faint">
+              <p className="mt-3 font-sans text-[0.95rem] leading-relaxed text-ink-faint">
                 Cada invitación tiene su propio enlace con los lugares reservados a tu nombre.
               </p>
             </div>

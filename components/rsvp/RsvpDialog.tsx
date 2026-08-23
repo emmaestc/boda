@@ -81,7 +81,7 @@ function StepShell({
       key={step}
       className="flex w-full flex-col items-center gap-6"
       initial={{ opacity: 0, x: 42, filter: "blur(6px)" }}
-      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+      animate={{ opacity: 1, x: 0, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
       exit={{ opacity: 0, x: -42, filter: "blur(6px)", position: "absolute" }}
       transition={{ duration: 0.6, ease: EASE_SILK }}
     >
@@ -89,7 +89,7 @@ function StepShell({
         <h3 className="font-serif text-2xl leading-snug font-light text-ink text-balance sm:text-3xl">
           {title}
         </h3>
-        {hint && <p className="max-w-xs font-sans text-xs text-ink-faint">{hint}</p>}
+        {hint && <p className="max-w-xs font-sans text-[0.95rem] text-ink-faint">{hint}</p>}
       </div>
       {children}
     </motion.div>
@@ -116,7 +116,7 @@ function Choice({
       whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 320, damping: 22 }}
       className={cn(
-        "min-h-14 w-full rounded-2xl border px-5 py-4 text-left font-sans text-sm transition-colors",
+        "min-h-14 w-full rounded-2xl border px-5 py-4 text-left font-sans text-base transition-colors",
         active
           ? "border-gold bg-gold-light/35 text-ink shadow-[0_10px_30px_-20px_rgba(198,168,103,0.9)]"
           : "border-powder/70 bg-white/70 text-ink-soft hover:border-gold/60 hover:bg-white",
@@ -267,7 +267,7 @@ export function RsvpDialog({
             ) : (
               <>
                 <div className="mb-7 flex flex-col items-center gap-2 text-center">
-                  <p className="font-sans text-[0.55rem] tracking-[0.38em] text-ink-faint uppercase">
+                  <p className="font-sans text-[0.88rem] tracking-[0.38em] text-ink-faint uppercase">
                     Confirmación
                   </p>
                   <p className="font-script text-2xl text-ink">{guest.nombre}</p>
@@ -306,7 +306,7 @@ export function RsvpDialog({
                           </Choice>
                         </div>
                         {guest.cupo > 1 && (
-                          <p className="font-sans text-xs text-ink-faint">
+                          <p className="font-sans text-[0.95rem] text-ink-faint">
                             Tienes {guest.cupo} lugares reservados.
                           </p>
                         )}
@@ -366,7 +366,7 @@ export function RsvpDialog({
                             <div key={i} className="flex items-center gap-3">
                               <span
                                 aria-hidden
-                                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-powder font-serif text-sm text-ink-faint"
+                                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-powder font-serif text-base text-ink-faint"
                               >
                                 {i + 1}
                               </span>
@@ -389,7 +389,7 @@ export function RsvpDialog({
                                     return { ...a, nombres };
                                   });
                                 }}
-                                className="min-h-11 w-full rounded-xl border border-powder bg-white/80 px-4 font-sans text-sm text-ink outline-none placeholder:text-ink-faint focus:border-gold"
+                                className="min-h-11 w-full rounded-xl border border-powder bg-white/80 px-4 font-sans text-base text-ink outline-none placeholder:text-ink-faint focus:border-gold"
                               />
                             </div>
                           ))}
@@ -430,7 +430,7 @@ export function RsvpDialog({
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: "auto" }}
                               exit={{ opacity: 0, height: 0 }}
-                              className="w-full rounded-xl border border-powder bg-white/80 px-4 py-3 font-sans text-sm text-ink outline-none placeholder:text-ink-faint focus:border-gold"
+                              className="w-full rounded-xl border border-powder bg-white/80 px-4 py-3 font-sans text-base text-ink outline-none placeholder:text-ink-faint focus:border-gold"
                             />
                           )}
                         </AnimatePresence>
@@ -454,10 +454,10 @@ export function RsvpDialog({
                           value={answer.message}
                           onChange={(e) => setAnswer((a) => ({ ...a, message: e.target.value }))}
                           placeholder="Escribe aquí…"
-                          className="w-full resize-none rounded-2xl border border-powder bg-white/80 px-4 py-3 font-sans text-sm leading-relaxed text-ink outline-none placeholder:text-ink-faint focus:border-gold"
+                          className="w-full resize-none rounded-2xl border border-powder bg-white/80 px-4 py-3 font-sans text-base leading-relaxed text-ink outline-none placeholder:text-ink-faint focus:border-gold"
                         />
                         {error && (
-                          <p role="alert" className="font-sans text-xs text-[#b4483f]">
+                          <p role="alert" className="font-sans text-[0.95rem] text-[#b4483f]">
                             {error}
                           </p>
                         )}
@@ -473,7 +473,7 @@ export function RsvpDialog({
                   <button
                     type="button"
                     onClick={step === 0 ? onClose : back}
-                    className="font-sans text-[0.62rem] tracking-[0.26em] text-ink-faint uppercase transition-colors hover:text-ink"
+                    className="font-sans text-[0.86rem] tracking-[0.26em] text-ink-faint uppercase transition-colors hover:text-ink"
                   >
                     {step === 0 ? "Cerrar" : "Atrás"}
                   </button>

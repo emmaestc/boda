@@ -18,12 +18,12 @@ function EnvelopeRain() {
   if (reduced) return null;
 
   const drops = [
-    { left: 8, size: 26, dur: 19, delay: 0, drift: 40, spin: 25 },
-    { left: 24, size: 18, dur: 26, delay: -6, drift: -60, spin: -40 },
-    { left: 44, size: 22, dur: 22, delay: -12, drift: 30, spin: 30 },
-    { left: 63, size: 16, dur: 29, delay: -3, drift: -35, spin: -20 },
-    { left: 79, size: 24, dur: 24, delay: -16, drift: 55, spin: 35 },
-    { left: 92, size: 19, dur: 21, delay: -9, drift: -25, spin: -30 },
+    { left: 8, size: 36, dur: 19, delay: 0, drift: 40, spin: 25 },
+    { left: 24, size: 28, dur: 26, delay: -6, drift: -60, spin: -40 },
+    { left: 44, size: 32, dur: 22, delay: -12, drift: 30, spin: 30 },
+    { left: 63, size: 26, dur: 29, delay: -3, drift: -35, spin: -20 },
+    { left: 79, size: 34, dur: 24, delay: -16, drift: 55, spin: 35 },
+    { left: 92, size: 29, dur: 21, delay: -9, drift: -25, spin: -30 },
   ];
 
   return (
@@ -45,18 +45,19 @@ function EnvelopeRain() {
             } as CSSVars
           }
         >
-          <svg viewBox="0 0 34 24" className="h-full w-full text-gold/70">
+          <svg viewBox="0 0 34 24" className="h-full w-full text-gold-deep/80">
             <rect
-              x="0.6"
-              y="0.6"
-              width="32.8"
-              height="22.8"
+              x="0.7"
+              y="0.7"
+              width="32.6"
+              height="22.6"
               rx="2"
-              fill="#fffdf7"
+              fill="#fffdf3"
               stroke="currentColor"
-              strokeWidth="0.9"
+              strokeWidth="1.4"
             />
-            <path d="M1 2 17 14 33 2" fill="none" stroke="currentColor" strokeWidth="0.9" />
+            <path d="M1.4 2.4 17 14 32.6 2.4" fill="none" stroke="currentColor" strokeWidth="1.4" />
+            <path d="M1.4 21.6 12 12.5M32.6 21.6 22 12.5" fill="none" stroke="currentColor" strokeWidth="0.9" opacity="0.55" />
           </svg>
         </span>
       ))}
@@ -114,7 +115,7 @@ function GiftEnvelope() {
       />
 
       {!open && (
-        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 font-sans text-[0.55rem] tracking-[0.3em] text-ink-faint uppercase">
+        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 font-sans text-[0.88rem] tracking-[0.3em] text-ink-faint uppercase">
           Tócalo
         </span>
       )}
@@ -159,7 +160,7 @@ export function Gift() {
         </Reveal>
 
         <Reveal delay={0.75}>
-          <p className="mt-14 max-w-xs font-sans text-xs leading-relaxed text-ink-faint">
+          <p className="mt-14 max-w-xs font-sans text-[0.95rem] leading-relaxed text-ink-faint">
             {wedding.copy.gift.note}
           </p>
         </Reveal>

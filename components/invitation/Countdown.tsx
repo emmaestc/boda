@@ -52,7 +52,7 @@ function Unit({ value, label }: { value: number; label: string }) {
             key={text}
             className="block font-serif text-4xl font-light tabular-nums text-ink"
             initial={{ y: "-70%", opacity: 0, filter: "blur(4px)" }}
-            animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
+            animate={{ y: "0%", opacity: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
             exit={{ y: "70%", opacity: 0, filter: "blur(4px)" }}
             transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           >
@@ -60,7 +60,7 @@ function Unit({ value, label }: { value: number; label: string }) {
           </motion.span>
         </AnimatePresence>
       </div>
-      <span className="font-sans text-[0.55rem] tracking-[0.28em] text-ink-faint uppercase">
+      <span className="font-sans text-[0.88rem] tracking-[0.28em] text-ink-faint uppercase">
         {label}
       </span>
     </div>

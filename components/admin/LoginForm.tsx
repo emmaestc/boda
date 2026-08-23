@@ -11,7 +11,7 @@ export function LoginForm() {
   return (
     <form action={formAction} className="flex w-full flex-col gap-4">
       <label className="flex flex-col gap-1.5">
-        <span className="font-sans text-[0.58rem] tracking-[0.28em] text-ink-faint uppercase">
+        <span className="font-sans text-[0.75rem] tracking-[0.28em] text-ink-faint uppercase">
           Usuario
         </span>
         <input
@@ -25,7 +25,7 @@ export function LoginForm() {
       </label>
 
       <label className="flex flex-col gap-1.5">
-        <span className="font-sans text-[0.58rem] tracking-[0.28em] text-ink-faint uppercase">
+        <span className="font-sans text-[0.75rem] tracking-[0.28em] text-ink-faint uppercase">
           Contraseña
         </span>
         <input
@@ -47,7 +47,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 min-h-12 rounded-full bg-ink font-sans text-[0.68rem] tracking-[0.3em] text-porcelain uppercase transition-colors hover:bg-[#1b2c3f] disabled:opacity-50"
+        className="mt-2 min-h-12 rounded-full bg-ink font-sans text-[0.86rem] tracking-[0.3em] text-porcelain uppercase transition-colors hover:bg-[#1b2c3f] disabled:opacity-50"
       >
         {pending ? "Entrando…" : "Entrar"}
       </button>

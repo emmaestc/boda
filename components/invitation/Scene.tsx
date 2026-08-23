@@ -34,12 +34,7 @@ export function Scene({
 /** Antetítulo en versalitas: la voz "práctica" de la invitación. */
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <p
-      className={cn(
-        "font-sans text-[0.6rem] font-medium tracking-[0.42em] text-ink-faint uppercase",
-        className,
-      )}
-    >
+    <p className={cn("eyebrow text-ink-faint", className)}>
       {children}
     </p>
   );

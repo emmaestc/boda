@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Atmosphere } from "./Atmosphere";
-import { Ambient } from "./Ambient";
+import { Ambient, PetalBurst } from "./Ambient";
 import { LightThread } from "./LightThread";
 import { MusicToggle, ScrollHint, ScrollProgress } from "./Chrome";
 import { Scene, Eyebrow } from "./Scene";
@@ -37,7 +37,7 @@ function Greeting({ name, cupo }: { name: string; cupo: number }) {
       </Reveal>
       {cupo > 1 && (
         <Reveal delay={0.4}>
-          <p className="mt-4 font-sans text-[0.6rem] tracking-[0.3em] text-ink-faint uppercase">
+          <p className="mt-4 font-sans text-[0.85rem] tracking-[0.3em] text-ink-faint uppercase">
             {cupo} lugares reservados
           </p>
         </Reveal>
@@ -60,23 +60,68 @@ export function Invitation({ guest }: { guest: PublicGuest | null }) {
   // golpe justo cuando el sobre todavía se está abriendo.
   const [opened, setOpened] = useState(false);
   const [preludeGone, setPreludeGone] = useState(false);
+  const [celebrando, setCelebrando] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const { playing, start: startMusic, toggle: toggleMusic } = useBackgroundMusic();
 
   const handleOpen = () => {
     setOpened(true);
+    setCelebrando(true);
     window.setTimeout(() => setPreludeGone(true), 1100);
+    // La lluvia de celebración dura lo que dura la alegría del momento.
+    window.setTimeout(() => setCelebrando(false), 9000);
   };
 
+  // El navegador recuerda dónde estaba el scroll al recargar. En una historia
+  // que empieza con un sobre cerrado, eso significa aparecer a mitad del
+  // relato: se desactiva.
   useEffect(() => {
-    if (opened) {
-      document.body.style.overflow = "";
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  useEffect(() => {
+    const body = document.body;
+
+    if (!opened) {
+      /*
+       * Bloqueo con `position: fixed` en lugar de `overflow: hidden`.
+       * En Safari de iOS el `overflow` del body no impide de verdad el
+       * desplazamiento, y de ahí venía que al abrir el sobre la historia
+       * apareciera empezada. Fijar el cuerpo sí lo impide, y además —a
+       * diferencia de bloquear el gesto táctil— deja intacto el pellizco
+       * para acercar.
+       */
+      body.style.position = "fixed";
+      body.style.top = "0";
+      body.style.left = "0";
+      body.style.right = "0";
+      body.style.width = "100%";
+      window.scrollTo({ top: 0, behavior: "instant" });
       return;
     }
-    document.body.style.overflow = "hidden";
-    window.scrollTo(0, 0);
+
+    body.style.position = "";
+    body.style.top = "";
+    body.style.left = "";
+    body.style.right = "";
+    body.style.width = "";
+
+    /*
+     * Y al soltarlo, arriba del todo. Se insiste tres veces a propósito: al
+     * instante, tras el reflujo del navegador y una vez que el velo termina
+     * de desaparecer, porque cada uno de esos momentos puede recolocar el
+     * scroll por su cuenta.
+     */
+    const alInicio = () => window.scrollTo({ top: 0, behavior: "instant" });
+    alInicio();
+    const t1 = window.setTimeout(alInicio, 0);
+    const t2 = window.setTimeout(alInicio, 180);
+
     return () => {
-      document.body.style.overflow = "";
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
     };
   }, [opened]);
 
@@ -90,9 +135,10 @@ export function Invitation({ guest }: { guest: PublicGuest | null }) {
           <ScrollHint />
         </>
       )}
+      {celebrando && <PetalBurst />}
       <MusicToggle visible={opened} playing={playing} onToggle={toggleMusic} />
 
-      <main ref={mainRef} inert={!opened} className="relative">
+      <main ref={mainRef} inert={!opened} className="clip-x relative">
         {/* Único h1 de la página: la experiencia es visual, pero un lector de
             pantalla y un buscador necesitan saber de qué trata en una línea. */}
         <h1 className="sr-only">

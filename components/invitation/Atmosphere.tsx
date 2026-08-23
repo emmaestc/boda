@@ -15,13 +15,16 @@ export function Atmosphere() {
   const base = useTransform(
     scrollYProgress,
     [0, 0.18, 0.42, 0.62, 0.82, 1],
-    ["#fcfbf8", "#f4f8fc", "#eaf2fa", "#f3f6fa", "#fbf6ec", "#fdfbf6"],
+    ["#fdfcf9", "#eef5fd", "#dfecf9", "#f4f2f2", "#fdf3e2", "#fdf6ec"],
   );
 
   // Velo azul: manda en la historia y la ceremonia.
-  const blueVeil = useTransform(scrollYProgress, [0, 0.2, 0.55, 0.75], [0.15, 0.6, 0.85, 0.1]);
+  const blueVeil = useTransform(scrollYProgress, [0, 0.2, 0.55, 0.75], [0.2, 0.75, 1, 0.15]);
   // Velo dorado: entra con la recepción y se queda hasta el cierre.
-  const goldVeil = useTransform(scrollYProgress, [0.5, 0.72, 1], [0, 0.7, 0.45]);
+  const goldVeil = useTransform(scrollYProgress, [0.5, 0.72, 1], [0, 0.9, 0.6]);
+  // Y un rubor cálido en el tramo del encuentro y la fecha, que es donde la
+  // paleta se quedaba más fría y la página se sentía apagada.
+  const roseVeil = useTransform(scrollYProgress, [0.12, 0.3, 0.5], [0, 0.55, 0]);
 
   return (
     <div aria-hidden className="paper-grain pointer-events-none fixed inset-0 -z-10 overflow-hidden">
@@ -47,11 +50,25 @@ export function Atmosphere() {
         }}
       />
 
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          opacity: roseVeil,
+          background:
+            "radial-gradient(80% 55% at 20% 40%, rgba(231,200,194,0.5), transparent 62%)," +
+            "radial-gradient(70% 50% at 92% 62%, rgba(244,227,223,0.65), transparent 60%)",
+        }}
+      />
+
       {/* Halos que respiran, muy lentos, para que el fondo nunca esté muerto. */}
-      <div className="absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-powder/30 blur-3xl animate-breathe" />
+      <div className="absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-powder/45 blur-3xl animate-breathe" />
       <div
-        className="absolute -right-20 top-2/3 h-80 w-80 rounded-full bg-gold-light/25 blur-3xl animate-breathe"
+        className="absolute -right-20 top-2/3 h-80 w-80 rounded-full bg-gold-light/40 blur-3xl animate-breathe"
         style={{ animationDelay: "3.5s" }}
+      />
+      <div
+        className="absolute left-1/3 top-1/2 h-64 w-64 rounded-full bg-rose/35 blur-3xl animate-breathe"
+        style={{ animationDelay: "6s" }}
       />
     </div>
   );

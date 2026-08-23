@@ -82,7 +82,7 @@ export function Prelude({
             {wedding.copy.envelope.eyebrow}
           </p>
           {guestName && (
-            <p className="mt-2 font-sans text-[0.58rem] tracking-[0.36em] text-ink-faint uppercase">
+            <p className="mt-2 font-sans text-[0.88rem] tracking-[0.36em] text-ink-faint uppercase">
               Para {guestName}
             </p>
           )}
@@ -105,7 +105,7 @@ export function Prelude({
           transition={{ duration: 1, ease: EASE_SILK, delay: 1 }}
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.97 }}
-          className="group relative mt-2 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-full bg-ink px-9 py-3.5 font-sans text-[0.68rem] font-medium tracking-[0.3em] text-porcelain uppercase shadow-[0_18px_44px_-24px_rgba(36,56,79,0.9)] transition-colors hover:bg-[#1b2c3f] disabled:opacity-40"
+          className="group relative mt-2 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-full bg-ink px-9 py-3.5 font-sans text-[0.92rem] font-medium tracking-[0.3em] text-porcelain uppercase shadow-[0_18px_44px_-24px_rgba(36,56,79,0.9)] transition-colors hover:bg-[#1b2c3f] disabled:opacity-40"
         >
           <span className="pointer-events-none absolute inset-0 -translate-x-full bg-[linear-gradient(100deg,transparent,rgba(233,216,176,0.5),transparent)] transition-transform duration-[900ms] group-hover:translate-x-full" />
           <span className="relative">{wedding.copy.envelope.cta}</span>

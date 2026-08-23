@@ -16,13 +16,18 @@
 
   --color-ink: #24384f;
   --color-ink-soft: #4d6478;
-  --color-ink-faint: #8fa2b3;
+  /* Contraste 4.7:1 sobre porcelana. El tono anterior se quedaba en 2.5:1,
+     que para una invitación con personas mayores era ilegible. */
+  --color-ink-faint: #5f7385;
 
   --color-gold: #c6a867;
   --color-gold-light: #e9d8b0;
   --color-gold-deep: #9a7c3e;
+  /* Oro oscurecido hasta 5.5:1, para cuando el dorado se usa en texto. */
+  --color-gold-text: #7d6330;
 
-  --color-blush: #f5e7e4;
+  --color-blush: #f4e3df;
+  --color-rose: #e7c8c2;
   --color-sage: #a9bfa5;
 
   --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
@@ -39,16 +44,13 @@
 }
 
 html {
+  /* Base de 17 px en lugar de 16. Sube de golpe todo el texto y todos los
+     espaciados de la invitación, que es lo que necesitan los invitados que
+     pasan de los setenta. Quien tenga configurado un tamaño mayor en su
+     teléfono lo sigue mandando: la escala es relativa, no fija. */
+  font-size: 106.25%;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-}
-
-html,
-body {
-  /* Blindaje contra scroll horizontal: pétalos y capas de parallax se
-     desplazan fuera del viewport por diseño. */
-  max-width: 100%;
-  overflow-x: clip;
 }
 
 body {
@@ -59,6 +61,18 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * El recorte horizontal va aquí y NO en `html`/`body` a propósito.
+ * Al hacer pinch para acercar, el navegador necesita poder desplazar la
+ * página en horizontal; con `overflow-x` recortado en la raíz ese gesto se
+ * bloquea y la página se siente pegada. Recortando en un contenedor interno
+ * las flores que asoman por los bordes siguen sin generar barra horizontal,
+ * pero el zoom se comporta con normalidad.
+ */
+.clip-x {
+  overflow-x: clip;
 }
 
 ::selection {
@@ -93,15 +107,24 @@ body {
   color: transparent;
 }
 
+/* Antetítulo: versalitas espaciadas, nunca por debajo de 14 px. */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
 /* Tarjeta de vidrio: la usan ceremonia, recepción y el flujo de RSVP. */
 @utility glass-card {
   background: linear-gradient(
     150deg,
-    rgba(255, 255, 255, 0.82) 0%,
-    rgba(242, 246, 251, 0.62) 100%
+    rgba(255, 255, 255, 0.86) 0%,
+    rgba(242, 246, 251, 0.7) 100%
   );
-  backdrop-filter: blur(14px) saturate(1.1);
-  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
   border: 1px solid rgba(255, 255, 255, 0.75);
   box-shadow: var(--shadow-soft);
 }
@@ -146,36 +169,21 @@ body {
   animation: drift 12s ease-in-out infinite;
 }
 
-/* Respeto total por quien pide menos movimiento: la experiencia se vuelve
-   estática, no incompleta. */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
 /* Pétalos y partículas: animación puramente CSS para que corran en el
    compositor y no toquen el hilo principal de JavaScript. */
 @keyframes petal-fall {
   0% {
-    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    transform: translate3d(0, -14vh, 0) rotate(0deg);
     opacity: 0;
   }
   8% {
-    opacity: var(--petal-opacity, 0.7);
+    opacity: var(--petal-opacity, 0.85);
   }
   92% {
-    opacity: var(--petal-opacity, 0.7);
+    opacity: var(--petal-opacity, 0.85);
   }
   100% {
-    transform: translate3d(var(--petal-drift, 40px), 112vh, 0)
+    transform: translate3d(var(--petal-drift, 40px), 114vh, 0)
       rotate(var(--petal-spin, 220deg));
     opacity: 0;
   }
@@ -220,13 +228,32 @@ body {
   animation-play-state: paused;
 }
 
-/* Grano de papel muy tenue sobre toda la experiencia. */
+/*
+ * Grano de papel muy tenue. Sin `mix-blend-mode`: mezclar una capa a pantalla
+ * completa obliga al compositor a recomponer todo el viewport en cada
+ * fotograma, y en teléfonos de gama media eso es la diferencia entre una
+ * página fluida y una que se traba al hacer zoom.
+ */
 .paper-grain::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.055;
-  mix-blend-mode: multiply;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Respeto total por quien pide menos movimiento: la experiencia se vuelve
+   estática, no incompleta. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

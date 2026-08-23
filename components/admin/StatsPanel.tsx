@@ -47,7 +47,7 @@ function StatCard({
       <span className="font-serif text-4xl leading-none font-light tabular-nums" style={{ color: tone }}>
         {shown}
       </span>
-      <span className="text-center font-sans text-[0.55rem] leading-tight tracking-[0.22em] text-ink-faint uppercase">
+      <span className="text-center font-sans text-[0.88rem] leading-tight tracking-[0.22em] text-ink-faint uppercase">
         {label}
       </span>
     </motion.div>
@@ -106,7 +106,7 @@ function Donut({ stats }: { stats: GuestStats }) {
           <span className="font-serif text-3xl font-light text-ink tabular-nums">
             {stats.personas_confirmadas}
           </span>
-          <span className="font-sans text-[0.5rem] tracking-[0.2em] text-ink-faint uppercase">
+          <span className="font-sans text-[0.7rem] tracking-[0.2em] text-ink-faint uppercase">
             personas
           </span>
         </div>

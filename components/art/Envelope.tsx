@@ -52,7 +52,7 @@ export function Envelope({
         transition={{ duration: reduced ? 0.2 : 1.15, ease: EASE, delay: opened && !reduced ? 0.62 : 0 }}
       >
         <Monogram size={56} />
-        <p className="font-serif text-[0.62rem] tracking-[0.42em] text-ink-soft uppercase">
+        <p className="font-serif text-[0.86rem] tracking-[0.42em] text-ink-soft uppercase">
           {wedding.date.day} · {wedding.date.month} · {wedding.date.year}
         </p>
       </motion.div>

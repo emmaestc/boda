@@ -28,11 +28,11 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="font-sans text-[0.55rem] tracking-[0.26em] text-ink-faint uppercase">
+      <span className="font-sans text-[0.88rem] tracking-[0.26em] text-ink-faint uppercase">
         {label}
       </span>
       {children}
-      {hint && <span className="font-sans text-[0.68rem] text-ink-faint">{hint}</span>}
+      {hint && <span className="font-sans text-[0.86rem] text-ink-faint">{hint}</span>}
     </label>
   );
 }
@@ -171,14 +171,14 @@ export function GuestDialog({
               <button
                 type="button"
                 onClick={onClose}
-                className="font-sans text-[0.62rem] tracking-[0.24em] text-ink-faint uppercase hover:text-ink"
+                className="font-sans text-[0.8rem] tracking-[0.24em] text-ink-faint uppercase hover:text-ink"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 disabled={pending}
-                className="min-h-11 rounded-full bg-ink px-6 font-sans text-[0.62rem] tracking-[0.26em] text-porcelain uppercase transition-colors hover:bg-[#1b2c3f] disabled:opacity-50"
+                className="min-h-11 rounded-full bg-ink px-6 font-sans text-[0.8rem] tracking-[0.26em] text-porcelain uppercase transition-colors hover:bg-[#1b2c3f] disabled:opacity-50"
               >
                 {pending ? "Guardando…" : guest ? "Guardar" : "Crear invitación"}
               </button>

@@ -41,7 +41,7 @@ function StatusBadge({ estado }: { estado: ConfirmationStatus }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-1 font-sans text-[0.58rem] tracking-[0.14em] uppercase",
+        "inline-flex items-center rounded-full border px-2.5 py-1 font-sans text-[0.75rem] tracking-[0.14em] uppercase",
         STATUS_STYLE[estado],
       )}
     >
@@ -64,7 +64,7 @@ function ActionLink({
       type="button"
       onClick={onClick}
       className={cn(
-        "font-sans text-[0.6rem] tracking-[0.16em] uppercase underline-offset-4 transition-colors hover:underline",
+        "font-sans text-[0.78rem] tracking-[0.16em] uppercase underline-offset-4 transition-colors hover:underline",
         danger ? "text-[#b4483f]" : "text-ink-faint hover:text-ink",
       )}
     >
@@ -152,7 +152,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
               type="button"
               onClick={() => setFilter(f.key)}
               className={cn(
-                "min-h-9 rounded-full border px-4 font-sans text-[0.6rem] tracking-[0.18em] uppercase transition-colors",
+                "min-h-9 rounded-full border px-4 font-sans text-[0.78rem] tracking-[0.18em] uppercase transition-colors",
                 filter === f.key
                   ? "border-ink bg-ink text-porcelain"
                   : "border-powder bg-white/70 text-ink-soft hover:border-gold",
@@ -173,7 +173,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
           />
           <a
             href="/consola/export"
-            className="min-h-9 rounded-full border border-powder bg-white/70 px-4 py-2 font-sans text-[0.6rem] tracking-[0.18em] text-ink-soft uppercase transition-colors hover:border-gold"
+            className="min-h-9 rounded-full border border-powder bg-white/70 px-4 py-2 font-sans text-[0.78rem] tracking-[0.18em] text-ink-soft uppercase transition-colors hover:border-gold"
           >
             Exportar
           </a>
@@ -184,7 +184,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
               setError(null);
               setDialogOpen(true);
             }}
-            className="min-h-9 rounded-full bg-gold-deep px-4 font-sans text-[0.6rem] tracking-[0.18em] text-white uppercase transition-colors hover:bg-[#856a35]"
+            className="min-h-9 rounded-full bg-gold-deep px-4 font-sans text-[0.78rem] tracking-[0.18em] text-white uppercase transition-colors hover:bg-[#856a35]"
           >
             Nuevo invitado
           </button>
@@ -202,7 +202,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
         {["Invitado", "Estado", "Asisten", "Restricción", "Respondió"].map((h) => (
           <span
             key={h}
-            className="font-sans text-[0.55rem] tracking-[0.24em] text-ink-faint uppercase"
+            className="font-sans text-[0.88rem] tracking-[0.24em] text-ink-faint uppercase"
           >
             {h}
           </span>
@@ -232,7 +232,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                   <span className="font-serif text-lg leading-tight font-light text-ink">
                     {guest.nombre}
                   </span>
-                  <span className="font-sans text-[0.62rem] tracking-[0.1em] text-ink-faint">
+                  <span className="font-sans text-[0.8rem] tracking-[0.1em] text-ink-faint">
                     {guest.grupo ? guest.grupo + " · " : ""}
                     {guest.codigo_invitacion}
                   </span>
@@ -270,7 +270,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                     <div className="flex flex-col gap-4 px-5 py-4">
                       <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                         <div className="col-span-2">
-                          <dt className="font-sans text-[0.52rem] tracking-[0.2em] text-ink-faint uppercase">
+                          <dt className="font-sans text-[0.86rem] tracking-[0.2em] text-ink-faint uppercase">
                             Quiénes vienen
                           </dt>
                           <dd className="font-sans text-xs text-ink-soft">
@@ -280,7 +280,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                           </dd>
                         </div>
                         <div>
-                          <dt className="font-sans text-[0.52rem] tracking-[0.2em] text-ink-faint uppercase">
+                          <dt className="font-sans text-[0.86rem] tracking-[0.2em] text-ink-faint uppercase">
                             Aperturas
                           </dt>
                           <dd className="font-sans text-xs text-ink-soft">
@@ -291,7 +291,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                           </dd>
                         </div>
                         <div className="col-span-2">
-                          <dt className="font-sans text-[0.52rem] tracking-[0.2em] text-ink-faint uppercase">
+                          <dt className="font-sans text-[0.86rem] tracking-[0.2em] text-ink-faint uppercase">
                             Mensaje
                           </dt>
                           <dd className="font-sans text-xs leading-relaxed text-ink-soft">
@@ -309,7 +309,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                           href={whatsappLink(guest)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-sans text-[0.6rem] tracking-[0.16em] text-ink-faint uppercase underline-offset-4 hover:text-ink hover:underline"
+                          className="font-sans text-[0.78rem] tracking-[0.16em] text-ink-faint uppercase underline-offset-4 hover:text-ink hover:underline"
                         >
                           Enviar por WhatsApp
                         </a>
@@ -318,7 +318,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                           href={linkFor(guest)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-sans text-[0.6rem] tracking-[0.16em] text-ink-faint uppercase underline-offset-4 hover:text-ink hover:underline"
+                          className="font-sans text-[0.78rem] tracking-[0.16em] text-ink-faint uppercase underline-offset-4 hover:text-ink hover:underline"
                         >
                           Abrir invitación
                         </a>
@@ -352,7 +352,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2 border-t border-powder/50 pt-3">
-                        <span className="font-sans text-[0.52rem] tracking-[0.2em] text-ink-faint uppercase">
+                        <span className="font-sans text-[0.86rem] tracking-[0.2em] text-ink-faint uppercase">
                           Marcar como
                         </span>
                         {CONFIRMATION_STATUS.map((estado) => (
@@ -371,7 +371,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                                 }),
                               )
                             }
-                            className="rounded-full border border-powder px-3 py-1 font-sans text-[0.56rem] tracking-[0.14em] text-ink-soft uppercase transition-colors hover:border-gold disabled:opacity-35"
+                            className="rounded-full border border-powder px-3 py-1 font-sans text-[0.88rem] tracking-[0.14em] text-ink-soft uppercase transition-colors hover:border-gold disabled:opacity-35"
                           >
                             {STATUS_LABEL[estado]}
                           </button>

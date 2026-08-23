@@ -40,7 +40,7 @@ export function ScrollHint() {
           exit={{ opacity: 0, y: 12, transition: { duration: 0.5 } }}
           transition={{ delay: 1.4, duration: 1 }}
         >
-          <span className="font-sans text-[0.58rem] tracking-[0.34em] text-ink-faint uppercase">
+          <span className="font-sans text-[0.88rem] tracking-[0.34em] text-ink-faint uppercase">
             Desliza
           </span>
           <motion.span
@@ -106,7 +106,7 @@ export function MusicToggle({
                 />
               ))}
             </span>
-            <span className="font-sans text-[0.55rem] tracking-[0.3em] text-ink-soft uppercase">
+            <span className="font-sans text-[0.88rem] tracking-[0.3em] text-ink-soft uppercase">
               {playing ? "Sonando" : "Música"}
             </span>
           </button>

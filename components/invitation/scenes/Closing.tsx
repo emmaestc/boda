@@ -37,13 +37,13 @@ export function Closing() {
       </Reveal>
 
       <Reveal delay={0.55}>
-        <p className="mt-3 font-sans text-[0.58rem] tracking-[0.42em] text-ink-faint uppercase">
+        <p className="mt-3 font-sans text-[0.88rem] tracking-[0.42em] text-ink-faint uppercase">
           {wedding.date.day} · {wedding.date.month} · {wedding.date.year}
         </p>
       </Reveal>
 
       <Reveal delay={0.7}>
-        <p className="mt-12 max-w-xs font-sans text-xs leading-relaxed text-ink-faint">
+        <p className="mt-12 max-w-xs font-sans text-[0.95rem] leading-relaxed text-ink-faint">
           {wedding.copy.closing}
         </p>
       </Reveal>

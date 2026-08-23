@@ -24,12 +24,19 @@ export function Names() {
   // Parallax muy contenido: profundidad sin marear.
   const ringsY = useTransform(scrollYProgress, [0, 1], [40, -40]);
   const namesY = useTransform(scrollYProgress, [0, 1], [16, -16]);
+  // La ilustración del fondo se mueve menos que todo lo demás: es la capa
+  // más lejana y así se nota la profundidad.
+  const fotoY = useTransform(scrollYProgress, [0, 1], [70, -70]);
 
   const name = (text: string, from: number, delay: number) => (
     <motion.span
       className="block font-serif text-[2.6rem] leading-none font-light tracking-[0.16em] text-ink uppercase sm:text-[3.6rem] sm:tracking-[0.2em]"
       initial={{ opacity: 0, x: from, filter: "blur(8px)" }}
-      animate={inView ? { opacity: 1, x: 0, filter: "blur(0px)" } : {}}
+      animate={
+        inView
+          ? { opacity: 1, x: 0, filter: "blur(0px)", transitionEnd: { filter: "none" } }
+          : {}
+      }
       transition={{ duration: 1.5, ease: EASE_SILK, delay }}
     >
       {text}
@@ -38,7 +45,30 @@ export function Names() {
 
   return (
     <Scene id="novios">
-      <div ref={ref} className="flex w-full flex-col items-center">
+      {/*
+        La pareja, muy desenfocada y detrás de todo: se percibe como una
+        presencia cálida más que como una fotografía, así que no compite con
+        los nombres ni le quita legibilidad a nada. La máscara radial disuelve
+        los bordes para que no se note el recuadro.
+      */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-[1] flex items-center justify-center"
+        style={{ y: fotoY }}
+        initial={{ opacity: 0, scale: 1.08 }}
+        animate={inView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 2.4, ease: EASE_SILK, delay: 0.3 }}
+      >
+        <div
+          className="h-[min(78vw,26rem)] w-[min(78vw,26rem)] bg-[url('/images/novios.jpg')] bg-cover bg-center opacity-[0.22] blur-[7px] saturate-[0.85]"
+          style={{
+            maskImage: "radial-gradient(circle at 50% 45%, #000 32%, transparent 72%)",
+            WebkitMaskImage: "radial-gradient(circle at 50% 45%, #000 32%, transparent 72%)",
+          }}
+        />
+      </motion.div>
+
+      <div ref={ref} className="relative flex w-full flex-col items-center">
         <motion.div style={{ y: ringsY }} className="w-52 sm:w-64">
           <Rings active={inView} className="w-full" />
         </motion.div>
@@ -55,7 +85,11 @@ export function Names() {
           <motion.span
             className="font-script text-gilded animate-shimmer my-1 block text-5xl leading-[0.8] sm:my-2 sm:text-6xl"
             initial={{ opacity: 0, scale: 0.4, filter: "blur(12px)" }}
-            animate={inView ? { opacity: 1, scale: 1, filter: "blur(0px)" } : {}}
+            animate={
+              inView
+                ? { opacity: 1, scale: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }
+                : {}
+            }
             transition={{ duration: 1.3, ease: EASE_SILK, delay: 1.35 }}
           >
             &amp;
@@ -74,7 +108,7 @@ export function Names() {
           <p className="max-w-xs font-serif text-base leading-relaxed text-ink-soft italic">
             &ldquo;{wedding.copy.verse.text}&rdquo;
           </p>
-          <span className="font-sans text-[0.55rem] tracking-[0.34em] text-ink-faint uppercase">
+          <span className="font-sans text-[0.88rem] tracking-[0.34em] text-ink-faint uppercase">
             {wedding.copy.verse.reference}
           </span>
         </motion.div>

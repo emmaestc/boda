@@ -57,15 +57,24 @@ function PlaceCard({
           {icon}
         </motion.div>
 
-        <Eyebrow className={accent === "warm" ? "text-gold-deep/80" : undefined}>{eyebrow}</Eyebrow>
+        <Eyebrow className={accent === "warm" ? "text-gold-text" : undefined}>{eyebrow}</Eyebrow>
 
         <h3 className="font-serif text-3xl leading-tight font-light text-ink text-balance sm:text-4xl">
           {title}
         </h3>
 
-        <div className="flex flex-col items-center gap-1">
-          {lines.map((line) => (
-            <p key={line} className="font-sans text-sm leading-relaxed text-ink-soft">
+        <div className="flex flex-col items-center gap-1.5">
+          {lines.map((line, i) => (
+            <p
+              key={line}
+              className={cn(
+                "leading-relaxed",
+                // La primera línea de datos y la hora se leen desde lejos.
+                i === 0
+                  ? "font-sans text-xl text-ink"
+                  : "font-sans text-lg text-ink-soft",
+              )}
+            >
               {line}
             </p>
           ))}

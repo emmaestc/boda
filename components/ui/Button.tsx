@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const base =
   "relative inline-flex min-h-12 items-center justify-center gap-2.5 overflow-hidden rounded-full px-7 py-3.5 " +
-  "font-sans text-[0.72rem] font-medium tracking-[0.24em] uppercase transition-colors duration-500 " +
+  "font-sans text-[0.95rem] font-medium tracking-[0.24em] uppercase transition-colors duration-500 " +
   "disabled:pointer-events-none disabled:opacity-45";
 
 const variants = {

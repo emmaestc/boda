@@ -40,7 +40,12 @@ export function DateScene() {
           <motion.span
             className="font-serif text-[5.5rem] leading-[0.85] font-light text-ink sm:text-[7.5rem]"
             initial={{ opacity: 0, scale: 1.35, filter: "blur(14px)" }}
-            whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            whileInView={{
+              opacity: 1,
+              scale: 1,
+              filter: "blur(0px)",
+              transitionEnd: { filter: "none" },
+            }}
             viewport={inViewOnce}
             transition={{ duration: 1.5, ease: EASE_SILK }}
           >
@@ -63,13 +68,13 @@ export function DateScene() {
         </Reveal>
 
         <Reveal delay={0.55} y={12}>
-          <p className="mt-1 font-sans text-sm tracking-[0.55em] text-ink-soft">
+          <p className="mt-1 font-sans text-base tracking-[0.55em] text-ink-soft">
             {wedding.date.year}
           </p>
         </Reveal>
 
         <Reveal delay={0.7} y={12}>
-          <p className="mt-6 font-sans text-[0.7rem] tracking-[0.32em] text-gold-deep uppercase">
+          <p className="mt-6 font-sans text-[0.95rem] tracking-[0.32em] text-gold-deep uppercase">
             {wedding.date.time}
           </p>
         </Reveal>
@@ -80,7 +85,7 @@ export function DateScene() {
       </Reveal>
 
       <Reveal delay={1} className="mt-10">
-        <ActionLink href={calendarLink()} variant="ghost" className="text-[0.62rem]">
+        <ActionLink href={calendarLink()} variant="ghost" className="text-[0.86rem]">
           Agendar en mi calendario
         </ActionLink>
       </Reveal>

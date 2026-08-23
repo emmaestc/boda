@@ -20,7 +20,7 @@ export default function InvitacionNoEncontrada() {
       </p>
       <Link
         href="/"
-        className="mt-2 font-sans text-[0.62rem] tracking-[0.28em] text-gold-deep uppercase underline-offset-4 hover:underline"
+        className="mt-2 font-sans text-[0.8rem] tracking-[0.28em] text-gold-deep uppercase underline-offset-4 hover:underline"
       >
         Ver la invitación
       </Link>

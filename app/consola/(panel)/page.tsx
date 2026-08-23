@@ -40,19 +40,19 @@ export default async function Consola() {
               <span className="font-serif text-base leading-tight font-light text-ink">
                 Consola de invitados
               </span>
-              <span className="font-sans text-[0.55rem] tracking-[0.22em] text-ink-faint uppercase">
+              <span className="font-sans text-[0.88rem] tracking-[0.22em] text-ink-faint uppercase">
                 {wedding.date.day} · {wedding.date.month} · {wedding.date.year}
               </span>
             </div>
           </div>
 
           <form action={cerrarSesion} className="flex items-center gap-3">
-            <span className="hidden font-sans text-[0.6rem] tracking-[0.18em] text-ink-faint uppercase sm:inline">
+            <span className="hidden font-sans text-[0.78rem] tracking-[0.18em] text-ink-faint uppercase sm:inline">
               {session.usuario}
             </span>
             <button
               type="submit"
-              className="min-h-9 rounded-full border border-powder px-4 font-sans text-[0.58rem] tracking-[0.2em] text-ink-soft uppercase transition-colors hover:border-gold hover:text-ink"
+              className="min-h-9 rounded-full border border-powder px-4 font-sans text-[0.75rem] tracking-[0.2em] text-ink-soft uppercase transition-colors hover:border-gold hover:text-ink"
             >
               Salir
             </button>
