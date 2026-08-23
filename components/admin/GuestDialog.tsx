@@ -8,14 +8,12 @@ import type { Guest } from "@/lib/guests/types";
 export type GuestDraftForm = {
   nombre: string;
   cantidad_personas_permitidas: number;
-  telefono: string;
   grupo: string;
 };
 
 const EMPTY: GuestDraftForm = {
   nombre: "",
   cantidad_personas_permitidas: 1,
-  telefono: "",
   grupo: "",
 };
 
@@ -76,7 +74,6 @@ export function GuestDialog({
         ? {
             nombre: guest.nombre,
             cantidad_personas_permitidas: guest.cantidad_personas_permitidas,
-            telefono: guest.telefono ?? "",
             grupo: guest.grupo ?? "",
           }
         : EMPTY,
@@ -151,17 +148,6 @@ export function GuestDialog({
                     }))
                   }
                   required
-                />
-              </Field>
-
-              <Field label="Teléfono" hint="Opcional. Sirve para enviar la invitación por WhatsApp.">
-                <input
-                  className={inputClass}
-                  value={form.telefono}
-                  onChange={(e) => setForm((f) => ({ ...f, telefono: e.target.value }))}
-                  maxLength={30}
-                  inputMode="tel"
-                  placeholder="573001234567"
                 />
               </Field>
 

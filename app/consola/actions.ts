@@ -31,8 +31,29 @@ function refresh(): void {
   revalidatePath("/consola");
 }
 
+/**
+ * Traduce los fallos de la base de datos a algo legible. Las violaciones de
+ * restricción llegan con el nombre técnico del `CHECK`, que no le dice nada a
+ * quien está usando el panel.
+ */
+const MENSAJES_DE_RESTRICCION: Array<[string, string]> = [
+  [
+    "guests_asistentes_dentro_del_cupo",
+    "Ese invitado ya confirmó más personas de las que quedarían permitidas. Sube el cupo o baja los asistentes confirmados.",
+  ],
+  [
+    "guests_nombres_dentro_del_cupo",
+    "Hay más nombres registrados que asistentes confirmados.",
+  ],
+  ["guests_cupo_valido", "Los lugares reservados deben estar entre 1 y 20."],
+  ["guests_nombre_no_vacio", "El nombre debe tener al menos dos caracteres."],
+];
+
 function fail(error: unknown): ActionResult {
   const message = error instanceof Error ? error.message : "Algo salió mal.";
+  for (const [constraint, texto] of MENSAJES_DE_RESTRICCION) {
+    if (message.includes(constraint)) return { ok: false, error: texto };
+  }
   return { ok: false, error: message };
 }
 
@@ -47,7 +68,6 @@ export async function crearInvitado(input: unknown): Promise<ActionResult> {
     await createGuest({
       nombre: parsed.data.nombre,
       cantidad_personas_permitidas: parsed.data.cantidad_personas_permitidas,
-      telefono: parsed.data.telefono ?? null,
       grupo: parsed.data.grupo ?? null,
     });
     refresh();
@@ -71,7 +91,6 @@ export async function actualizarInvitado(id: string, input: unknown): Promise<Ac
     await updateGuest(idOk.data, {
       nombre: parsed.data.nombre,
       cantidad_personas_permitidas: parsed.data.cantidad_personas_permitidas,
-      telefono: parsed.data.telefono ?? null,
       grupo: parsed.data.grupo ?? null,
     });
     refresh();
@@ -96,9 +115,13 @@ export async function cambiarEstado(id: string, input: unknown): Promise<ActionR
   if (!parsed.success) return { ok: false, error: "Estado inválido." };
 
   try {
+    const confirma = parsed.data.estado === "confirmado";
     await updateGuest(idOk.data, {
       estado_confirmacion: parsed.data.estado,
-      cantidad_asistentes: parsed.data.estado === "confirmado" ? Math.max(1, parsed.data.cantidad) : 0,
+      cantidad_asistentes: confirma ? Math.max(1, parsed.data.cantidad) : 0,
+      // Si deja de asistir, los nombres registrados dejan de tener sentido
+      // (y la base de datos no admite más nombres que asistentes).
+      ...(confirma ? {} : { nombres_asistentes: [] }),
     });
     refresh();
     return { ok: true };

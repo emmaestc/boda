@@ -6,7 +6,7 @@
  *   npm run nuevo-invitado -- --archivo invitados.txt
  *
  * El archivo debe tener una línea por invitado con el formato:
- *   Nombre completo; lugares; teléfono; grupo
+ *   Nombre completo; lugares; grupo
  * (todo salvo el nombre es opcional)
  *
  * Imprime el enlace personal de cada invitación creada.
@@ -45,7 +45,7 @@ if (!url || !key) {
   process.exit(1);
 }
 
-/** [{ nombre, lugares, telefono, grupo }] */
+/** [{ nombre, lugares, grupo }] */
 function parseArgs() {
   const args = process.argv.slice(2);
 
@@ -60,17 +60,16 @@ function parseArgs() {
       .map((line) => line.trim())
       .filter((line) => line && !line.startsWith("#"))
       .map((line) => {
-        const [nombre, lugares, telefono, grupo] = line.split(";").map((p) => (p ?? "").trim());
+        const [nombre, lugares, grupo] = line.split(";").map((p) => (p ?? "").trim());
         return {
           nombre,
           lugares: Number(lugares) || 1,
-          telefono: telefono || null,
           grupo: grupo || null,
         };
       });
   }
 
-  const [nombre, lugares, telefono, grupo] = args;
+  const [nombre, lugares, grupo] = args;
   if (!nombre) {
     console.error('Uso: npm run nuevo-invitado -- "Nombre Apellido" 2');
     process.exit(1);
@@ -79,7 +78,6 @@ function parseArgs() {
     {
       nombre,
       lugares: Number(lugares) || 1,
-      telefono: telefono || null,
       grupo: grupo || null,
     },
   ];
@@ -101,7 +99,6 @@ for (const invitado of invitados) {
       nombre: invitado.nombre,
       codigo_invitacion: codigo,
       cantidad_personas_permitidas: invitado.lugares,
-      telefono: invitado.telefono,
       grupo: invitado.grupo,
     }),
   });

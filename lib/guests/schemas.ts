@@ -32,6 +32,15 @@ export const rsvpInputSchema = z.object({
     .regex(/^[A-Z0-9]{6,16}$/, "Código de invitación inválido"),
   asiste: z.boolean(),
   cantidad: z.number().int().min(0).max(20),
+  /**
+   * Nombres de quienes asisten. Llegan tal cual del formulario, con huecos
+   * incluidos: se limpian y se descartan los vacíos antes de guardarlos.
+   */
+  nombres: z
+    .array(cleanText(120))
+    .max(20)
+    .optional()
+    .transform((lista) => (lista ?? []).filter((n) => n.length > 0)),
   restriccion: z.enum(DIET),
   restriccion_detalle: cleanText(120).nullable().optional(),
   comentario: cleanText(500).nullable().optional(),
@@ -42,7 +51,6 @@ export type RsvpInput = z.infer<typeof rsvpInputSchema>;
 export const guestFormSchema = z.object({
   nombre: cleanText(120).pipe(z.string().min(2, "El nombre es obligatorio")),
   cantidad_personas_permitidas: z.coerce.number().int().min(1).max(20),
-  telefono: cleanText(30).nullable().optional(),
   grupo: cleanText(60).nullable().optional(),
   estado_confirmacion: z.enum(CONFIRMATION_STATUS).optional(),
   cantidad_asistentes: z.coerce.number().int().min(0).max(20).optional(),

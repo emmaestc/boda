@@ -94,7 +94,8 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
         !needle ||
         g.nombre.toLowerCase().includes(needle) ||
         (g.grupo ?? "").toLowerCase().includes(needle) ||
-        g.codigo_invitacion.toLowerCase().includes(needle);
+        g.codigo_invitacion.toLowerCase().includes(needle) ||
+        g.nombres_asistentes.some((n) => n.toLowerCase().includes(needle));
       return matchesFilter && matchesQuery;
     });
   }, [guests, filter, query]);
@@ -126,14 +127,18 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
     }
   }
 
+  /**
+   * Abre WhatsApp con el mensaje ya escrito y deja elegir el contacto ahí
+   * mismo. Sin número: no lo guardamos, y el selector de contactos de
+   * WhatsApp es más cómodo que teclearlo.
+   */
   function whatsappLink(guest: Guest): string {
-    const phone = (guest.telefono ?? "").replace(/\D/g, "");
     const text =
       "Hola " +
       guest.nombre.split(" ")[0] +
       ", con mucha alegría te compartimos nuestra invitación de matrimonio: " +
       linkFor(guest);
-    return "https://wa.me/" + phone + "?text=" + encodeURIComponent(text);
+    return "https://wa.me/?text=" + encodeURIComponent(text);
   }
 
   return (
@@ -163,7 +168,7 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar por nombre, grupo o código"
+            placeholder="Buscar por nombre, acompañante, grupo o código"
             className="min-h-9 w-full min-w-56 flex-1 rounded-full border border-powder bg-white/80 px-4 font-sans text-xs text-ink outline-none focus:border-gold sm:w-auto"
           />
           <a
@@ -264,12 +269,14 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                   >
                     <div className="flex flex-col gap-4 px-5 py-4">
                       <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                        <div>
+                        <div className="col-span-2">
                           <dt className="font-sans text-[0.52rem] tracking-[0.2em] text-ink-faint uppercase">
-                            Teléfono
+                            Quiénes vienen
                           </dt>
                           <dd className="font-sans text-xs text-ink-soft">
-                            {guest.telefono || "—"}
+                            {guest.nombres_asistentes.length > 0
+                              ? guest.nombres_asistentes.join(" · ")
+                              : "—"}
                           </dd>
                         </div>
                         <div>
@@ -298,16 +305,14 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                           {copied === guest.id ? "¡Copiado!" : "Copiar enlace"}
                         </ActionLink>
 
-                        {guest.telefono && (
-                          <a
-                            href={whatsappLink(guest)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-sans text-[0.6rem] tracking-[0.16em] text-ink-faint uppercase underline-offset-4 hover:text-ink hover:underline"
-                          >
-                            Enviar por WhatsApp
-                          </a>
-                        )}
+                        <a
+                          href={whatsappLink(guest)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-sans text-[0.6rem] tracking-[0.16em] text-ink-faint uppercase underline-offset-4 hover:text-ink hover:underline"
+                        >
+                          Enviar por WhatsApp
+                        </a>
 
                         <a
                           href={linkFor(guest)}

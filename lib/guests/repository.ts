@@ -13,7 +13,8 @@ import type { Diet, Guest, GuestStats, PublicGuest } from "./types";
 
 const PUBLIC_COLUMNS =
   "nombre, codigo_invitacion, cantidad_personas_permitidas, estado_confirmacion, " +
-  "cantidad_asistentes, restriccion_alimentaria, restriccion_detalle, comentario";
+  "cantidad_asistentes, nombres_asistentes, restriccion_alimentaria, " +
+  "restriccion_detalle, comentario";
 
 type PublicRow = {
   nombre: string;
@@ -21,6 +22,7 @@ type PublicRow = {
   cantidad_personas_permitidas: number;
   estado_confirmacion: PublicGuest["estado"];
   cantidad_asistentes: number;
+  nombres_asistentes: string[] | null;
   restriccion_alimentaria: Diet;
   restriccion_detalle: string | null;
   comentario: string | null;
@@ -33,6 +35,7 @@ function toPublicGuest(row: PublicRow): PublicGuest {
     cupo: row.cantidad_personas_permitidas,
     estado: row.estado_confirmacion,
     asistentes: row.cantidad_asistentes,
+    nombres: row.nombres_asistentes ?? [],
     restriccion: row.restriccion_alimentaria,
     restriccionDetalle: row.restriccion_detalle,
     comentario: row.comentario,
@@ -64,6 +67,7 @@ export type RsvpPayload = {
   codigo: string;
   asiste: boolean;
   cantidad: number;
+  nombres: string[];
   restriccion: Diet;
   restriccion_detalle: string | null;
   comentario: string | null;
@@ -95,11 +99,16 @@ export async function saveRsvp(
     ? Math.min(Math.max(payload.cantidad, 1), existing.cantidad_personas_permitidas)
     : 0;
 
+  // Nunca más nombres que asistentes: si alguien bajó la cantidad después de
+  // escribirlos, sobran los últimos.
+  const nombres = payload.asiste ? payload.nombres.slice(0, cantidad) : [];
+
   const { data: updated, error: updateError } = await db
     .from("guests")
     .update({
       estado_confirmacion: payload.asiste ? "confirmado" : "no_asiste",
       cantidad_asistentes: cantidad,
+      nombres_asistentes: nombres,
       restriccion_alimentaria: payload.asiste ? payload.restriccion : "ninguna",
       restriccion_detalle:
         payload.asiste && payload.restriccion === "otra" ? payload.restriccion_detalle : null,
@@ -119,6 +128,7 @@ export async function saveRsvp(
     guest_id: existing.id,
     estado: payload.asiste ? "confirmado" : "no_asiste",
     cantidad_asistentes: cantidad,
+    nombres_asistentes: nombres,
     restriccion: payload.asiste ? payload.restriccion : "ninguna",
     comentario: payload.comentario,
   });
@@ -163,7 +173,6 @@ export async function getStats(): Promise<GuestStats> {
 export type GuestDraft = {
   nombre: string;
   cantidad_personas_permitidas: number;
-  telefono?: string | null;
   grupo?: string | null;
 };
 
@@ -178,7 +187,6 @@ export async function createGuest(draft: GuestDraft): Promise<Guest> {
         nombre: draft.nombre,
         codigo_invitacion: generateInvitationCode(),
         cantidad_personas_permitidas: draft.cantidad_personas_permitidas,
-        telefono: draft.telefono || null,
         grupo: draft.grupo || null,
       })
       .select("*")
@@ -196,10 +204,10 @@ export async function createGuest(draft: GuestDraft): Promise<Guest> {
 export type GuestPatch = Partial<{
   nombre: string;
   cantidad_personas_permitidas: number;
-  telefono: string | null;
   grupo: string | null;
   estado_confirmacion: Guest["estado_confirmacion"];
   cantidad_asistentes: number;
+  nombres_asistentes: string[];
 }>;
 
 export async function updateGuest(id: string, patch: GuestPatch): Promise<Guest> {

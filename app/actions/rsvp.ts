@@ -32,6 +32,7 @@ export async function submitRsvp(raw: unknown): Promise<RsvpResult> {
     codigo: input.codigo,
     asiste: input.asiste,
     cantidad: input.cantidad,
+    nombres: input.nombres,
     restriccion: input.restriccion,
     restriccion_detalle: input.restriccion_detalle ?? null,
     comentario: input.comentario ?? null,

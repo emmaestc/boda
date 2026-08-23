@@ -13,10 +13,27 @@ import { cn } from "@/lib/utils";
 type Answer = {
   attending: boolean | null;
   count: number;
+  /** Un nombre por asistente, en el mismo orden en que se muestran. */
+  nombres: string[];
   diet: Diet;
   dietDetail: string;
   message: string;
 };
+
+type Step = "asistencia" | "cuantos" | "acompanantes" | "dieta" | "mensaje";
+
+/**
+ * Ajusta la lista de nombres al número de asistentes elegido, conservando lo
+ * ya escrito. La primera casilla llega con el nombre de la invitación puesto:
+ * casi siempre es correcto y ahorra escribirlo.
+ */
+function ajustarNombres(actuales: string[], total: number, primero: string): string[] {
+  const siguientes = actuales.slice(0, total);
+  while (siguientes.length < total) {
+    siguientes.push(siguientes.length === 0 ? primero : "");
+  }
+  return siguientes;
+}
 
 /** Pequeño estallido de corazones al confirmar. Dura poco y no se repite. */
 function Burst() {
@@ -124,6 +141,7 @@ export function RsvpDialog({
   const [answer, setAnswer] = useState<Answer>({
     attending: guest.estado === "pendiente" ? null : guest.estado === "confirmado",
     count: guest.asistentes || Math.min(1, guest.cupo),
+    nombres: guest.nombres.length ? guest.nombres : [guest.nombre],
     diet: guest.restriccion,
     dietDetail: guest.restriccionDetalle ?? "",
     message: guest.comentario ?? "",
@@ -149,12 +167,26 @@ export function RsvpDialog({
     };
   }, [open, onClose]);
 
-  const stepsForYes = ["asistencia", "cuantos", "dieta", "mensaje"] as const;
-  const stepsForNo = ["asistencia", "mensaje"] as const;
+  const stepsForYes: Step[] = ["asistencia", "cuantos", "acompanantes", "dieta", "mensaje"];
+  const stepsForNo: Step[] = ["asistencia", "mensaje"];
   const steps = answer.attending === false ? stepsForNo : stepsForYes;
-  // Con un solo cupo no tiene sentido preguntar cuántos vendrán.
-  const visibleSteps = guest.cupo <= 1 ? steps.filter((s) => s !== "cuantos") : steps;
+
+  const asistentes = guest.cupo <= 1 ? 1 : answer.count;
+  const visibleSteps = steps.filter((s) => {
+    // Con un solo cupo no tiene sentido preguntar cuántos vendrán.
+    if (s === "cuantos") return guest.cupo > 1;
+    // Ni pedir nombres si viene una sola persona: ya sabemos quién es.
+    if (s === "acompanantes") return asistentes > 1;
+    return true;
+  });
   const current = visibleSteps[Math.min(step, visibleSteps.length - 1)];
+
+  /** Cambia el número de asistentes y reajusta las casillas de nombres. */
+  const setCount = (valor: number) =>
+    setAnswer((a) => {
+      const total = Math.min(Math.max(valor, 1), guest.cupo);
+      return { ...a, count: total, nombres: ajustarNombres(a.nombres, total, guest.nombre) };
+    });
 
   const next = () => setStep((s) => Math.min(s + 1, visibleSteps.length - 1));
   const back = () => setStep((s) => Math.max(s - 1, 0));
@@ -165,7 +197,11 @@ export function RsvpDialog({
     const result = await submitRsvp({
       codigo: guest.codigo,
       asiste: answer.attending === true,
-      cantidad: answer.attending === true ? (guest.cupo <= 1 ? 1 : answer.count) : 0,
+      cantidad: answer.attending === true ? asistentes : 0,
+      nombres:
+        answer.attending === true && asistentes > 1
+          ? answer.nombres.slice(0, asistentes).map((n) => n.trim())
+          : [],
       restriccion: answer.attending === true ? answer.diet : "ninguna",
       restriccion_detalle: answer.diet === "otra" ? answer.dietDetail : null,
       comentario: answer.message.trim() || null,
@@ -287,9 +323,7 @@ export function RsvpDialog({
                           <button
                             type="button"
                             aria-label="Quitar una persona"
-                            onClick={() =>
-                              setAnswer((a) => ({ ...a, count: Math.max(1, a.count - 1) }))
-                            }
+                            onClick={() => setCount(answer.count - 1)}
                             className="grid h-12 w-12 place-items-center rounded-full border border-powder text-xl text-ink-soft transition-colors hover:border-gold hover:text-ink"
                           >
                             −
@@ -311,16 +345,54 @@ export function RsvpDialog({
                           <button
                             type="button"
                             aria-label="Agregar una persona"
-                            onClick={() =>
-                              setAnswer((a) => ({
-                                ...a,
-                                count: Math.min(guest.cupo, a.count + 1),
-                              }))
-                            }
+                            onClick={() => setCount(answer.count + 1)}
                             className="grid h-12 w-12 place-items-center rounded-full border border-powder text-xl text-ink-soft transition-colors hover:border-gold hover:text-ink"
                           >
                             +
                           </button>
+                        </div>
+                        <ActionButton onClick={next}>Continuar</ActionButton>
+                      </StepShell>
+                    )}
+
+                    {current === "acompanantes" && (
+                      <StepShell
+                        step="acompanantes"
+                        title="¿Quiénes vienen?"
+                        hint="Nos ayuda a preparar las mesas y la tarjeta de cada puesto."
+                      >
+                        <div className="flex w-full flex-col gap-2.5">
+                          {Array.from({ length: asistentes }, (_, i) => (
+                            <div key={i} className="flex items-center gap-3">
+                              <span
+                                aria-hidden
+                                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-powder font-serif text-sm text-ink-faint"
+                              >
+                                {i + 1}
+                              </span>
+                              <input
+                                type="text"
+                                maxLength={120}
+                                autoComplete="off"
+                                value={answer.nombres[i] ?? ""}
+                                aria-label={"Nombre de la persona " + (i + 1)}
+                                placeholder={i === 0 ? "Nombre y apellido" : "Acompañante"}
+                                onChange={(e) => {
+                                  const valor = e.target.value;
+                                  setAnswer((a) => {
+                                    const nombres = ajustarNombres(
+                                      a.nombres,
+                                      asistentes,
+                                      guest.nombre,
+                                    );
+                                    nombres[i] = valor;
+                                    return { ...a, nombres };
+                                  });
+                                }}
+                                className="min-h-11 w-full rounded-xl border border-powder bg-white/80 px-4 font-sans text-sm text-ink outline-none placeholder:text-ink-faint focus:border-gold"
+                              />
+                            </div>
+                          ))}
                         </div>
                         <ActionButton onClick={next}>Continuar</ActionButton>
                       </StepShell>

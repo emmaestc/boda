@@ -31,6 +31,8 @@ export type PublicGuest = {
   cupo: number;
   estado: ConfirmationStatus;
   asistentes: number;
+  /** Quiénes vienen, cuando la invitación cubre a más de una persona. */
+  nombres: string[];
   restriccion: Diet;
   restriccionDetalle: string | null;
   comentario: string | null;
@@ -41,11 +43,11 @@ export type Guest = {
   id: string;
   nombre: string;
   codigo_invitacion: string;
-  telefono: string | null;
   grupo: string | null;
   cantidad_personas_permitidas: number;
   estado_confirmacion: ConfirmationStatus;
   cantidad_asistentes: number;
+  nombres_asistentes: string[];
   restriccion_alimentaria: Diet;
   restriccion_detalle: string | null;
   comentario: string | null;

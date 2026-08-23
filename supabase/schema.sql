@@ -1,7 +1,7 @@
 -- =====================================================================
 --  Johana & Emmanuel — esquema de invitados
 --  Ejecutable tal cual en el SQL Editor de Supabase. Es idempotente:
---  se puede volver a correr sin romper nada.
+--  se puede volver a correr sin romper nada ni perder datos.
 -- =====================================================================
 
 -- ---------- Tipos ----------------------------------------------------
@@ -23,11 +23,14 @@ create table if not exists public.guests (
   id                            uuid primary key default gen_random_uuid(),
   nombre                        text not null,
   codigo_invitacion             text not null unique,
-  telefono                      text,
   grupo                         text,
   cantidad_personas_permitidas  smallint not null default 1,
   estado_confirmacion           estado_confirmacion not null default 'pendiente',
   cantidad_asistentes           smallint not null default 0,
+  -- Quiénes vienen exactamente. Se piden en el RSVP cuando la invitación
+  -- cubre a más de una persona, y sirven para armar las mesas y las
+  -- tarjetas de cada puesto.
+  nombres_asistentes            text[] not null default '{}',
   restriccion_alimentaria       restriccion_alimentaria not null default 'ninguna',
   restriccion_detalle           text,
   comentario                    text,
@@ -65,6 +68,38 @@ create index if not exists guests_estado_idx  on public.guests (estado_confirmac
 create index if not exists guests_creado_idx  on public.guests (created_at desc);
 create index if not exists guests_nombre_idx  on public.guests (lower(nombre));
 
+-- ---------- Evolución del esquema ------------------------------------
+-- Para bases de datos creadas con una versión anterior de este archivo.
+-- Cada paso comprueba antes de actuar, así que volver a correrlo no hace
+-- nada.
+
+-- El teléfono se retiró: no aportaba nada al proceso de invitación.
+alter table public.guests drop column if exists telefono;
+
+alter table public.guests
+  add column if not exists nombres_asistentes text[] not null default '{}';
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'guests_nombres_dentro_del_cupo'
+  ) then
+    alter table public.guests add constraint guests_nombres_dentro_del_cupo
+      check (coalesce(array_length(nombres_asistentes, 1), 0) <= cantidad_asistentes);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'guests_nombres_acotados'
+  ) then
+    alter table public.guests add constraint guests_nombres_acotados
+      check (
+        coalesce(array_length(nombres_asistentes, 1), 0) <= 20
+        and coalesce(length(array_to_string(nombres_asistentes, ',')), 0) <= 2000
+      );
+  end if;
+end
+$$;
+
 -- ---------- updated_at automático ------------------------------------
 
 -- Solo se considera "modificado" un cambio real de contenido. Que alguien
@@ -98,10 +133,14 @@ create table if not exists public.rsvp_eventos (
   guest_id             uuid not null references public.guests (id) on delete cascade,
   estado               estado_confirmacion not null,
   cantidad_asistentes  smallint not null,
+  nombres_asistentes   text[] not null default '{}',
   restriccion          restriccion_alimentaria not null,
   comentario           text,
   created_at           timestamptz not null default now()
 );
+
+alter table public.rsvp_eventos
+  add column if not exists nombres_asistentes text[] not null default '{}';
 
 create index if not exists rsvp_eventos_guest_idx
   on public.rsvp_eventos (guest_id, created_at desc);
