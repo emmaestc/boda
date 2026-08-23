@@ -1,26 +1,232 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ *
+ * Sistema de diseño — "El hilo de luz"
+ * Porcelana y azul pastel para la historia, oro para lo sagrado y lo
+ * celebratorio. Sin modo oscuro: la invitación es luz, siempre.
+ * ------------------------------------------------------------------ */
+
+@theme {
+  --color-porcelain: #fcfbf8;
+  --color-mist: #f2f6fb;
+  --color-sky: #e2ecf7;
+  --color-powder: #c7dbee;
+  --color-azure: #9dbcda;
+  --color-deep: #5c7f9f;
+
+  --color-ink: #24384f;
+  --color-ink-soft: #4d6478;
+  --color-ink-faint: #8fa2b3;
+
+  --color-gold: #c6a867;
+  --color-gold-light: #e9d8b0;
+  --color-gold-deep: #9a7c3e;
+
+  --color-blush: #f5e7e4;
+  --color-sage: #a9bfa5;
+
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-script: var(--font-vibes), "Great Vibes", cursive;
+  --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-soft: 0 18px 60px -30px rgba(36, 56, 79, 0.35);
+  --shadow-lift: 0 30px 90px -40px rgba(36, 56, 79, 0.45);
+  --shadow-glow: 0 0 60px -10px rgba(233, 216, 176, 0.55);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  /* Blindaje contra scroll horizontal: pétalos y capas de parallax se
+     desplazan fuera del viewport por diseño. */
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-porcelain);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--color-gold-light);
+  color: var(--color-ink);
+}
+
+/* Foco visible y elegante para navegación por teclado. */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@utility text-shadow-soft {
+  text-shadow: 0 1px 24px rgba(255, 255, 255, 0.85);
+}
+
+/* Texto con degradado dorado. */
+@utility text-gilded {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold-deep) 0%,
+    var(--color-gold) 30%,
+    var(--color-gold-light) 50%,
+    var(--color-gold) 70%,
+    var(--color-gold-deep) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Tarjeta de vidrio: la usan ceremonia, recepción y el flujo de RSVP. */
+@utility glass-card {
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(242, 246, 251, 0.62) 100%
+  );
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: var(--shadow-soft);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(14px, -18px, 0) rotate(4deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 6s linear infinite;
+}
+.animate-breathe {
+  animation: breathe 7s ease-in-out infinite;
+}
+.animate-drift {
+  animation: drift 12s ease-in-out infinite;
+}
+
+/* Respeto total por quien pide menos movimiento: la experiencia se vuelve
+   estática, no incompleta. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Pétalos y partículas: animación puramente CSS para que corran en el
+   compositor y no toquen el hilo principal de JavaScript. */
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: var(--petal-opacity, 0.7);
+  }
+  92% {
+    opacity: var(--petal-opacity, 0.7);
+  }
+  100% {
+    transform: translate3d(var(--petal-drift, 40px), 112vh, 0)
+      rotate(var(--petal-spin, 220deg));
+    opacity: 0;
+  }
+}
+
+@keyframes spark-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.6);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--spark-drift, 20px), -60vh, 0) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.petal {
+  position: absolute;
+  top: 0;
+  will-change: transform, opacity;
+  animation-name: petal-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.spark {
+  position: absolute;
+  bottom: -4vh;
+  border-radius: 9999px;
+  will-change: transform, opacity;
+  animation-name: spark-float;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+}
+
+/* Se congelan cuando la pestaña no está visible: cero gasto en segundo plano. */
+.ambient-paused .petal,
+.ambient-paused .spark {
+  animation-play-state: paused;
+}
+
+/* Grano de papel muy tenue sobre toda la experiencia. */
+.paper-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
 }
