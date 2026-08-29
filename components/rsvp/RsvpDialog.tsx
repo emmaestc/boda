@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ActionButton } from "@/components/ui/Button";
 import { Divider } from "@/components/art/Icons";
-import { Heart } from "lucide-react";
+import { ChevronLeft, Heart, X } from "lucide-react";
 import { Monogram } from "@/components/art/Monogram";
 import { EASE_SILK } from "@/lib/motion";
 import { DIET, DIET_LABEL, type Diet, type PublicGuest } from "@/lib/guests/types";
@@ -94,6 +94,36 @@ function StepShell({
       </div>
       {children}
     </motion.div>
+  );
+}
+
+/** Botón de más/menos con su etiqueta: un signo suelto no dice qué hace. */
+function Paso({
+  etiqueta,
+  signo,
+  aria,
+  desactivado,
+  onClick,
+}: {
+  etiqueta: string;
+  signo: string;
+  aria: string;
+  desactivado: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <span className="flex flex-col items-center gap-2">
+      <button
+        type="button"
+        aria-label={aria}
+        disabled={desactivado}
+        onClick={onClick}
+        className="grid h-12 w-12 place-items-center rounded-full border border-powder text-2xl leading-none text-ink-soft transition-colors hover:border-gold hover:text-ink disabled:opacity-35 disabled:hover:border-powder"
+      >
+        {signo}
+      </button>
+      <span className="eyebrow text-ink-faint">{etiqueta}</span>
+    </span>
   );
 }
 
@@ -267,11 +297,37 @@ export function RsvpDialog({
               </div>
             ) : (
               <>
-                <div className="mb-7 flex flex-col items-center gap-2 text-center">
-                  <p className="font-sans text-[0.88rem] tracking-[0.38em] text-ink-faint uppercase">
-                    Confirmación
-                  </p>
-                  <p className="font-serif text-[1.6rem] font-light text-ink">{guest.nombre}</p>
+                {/*
+                  Volver y cerrar viven arriba, cada uno en su esquina. Abajo
+                  quedaban en la zona del pulgar donde flota el control de
+                  música, y ahí no se veían.
+                */}
+                <div className="mb-6 flex items-center justify-between gap-2">
+                  <button
+                    type="button"
+                    onClick={back}
+                    disabled={step === 0}
+                    aria-label="Volver a la pregunta anterior"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-powder text-ink-soft transition-colors hover:border-gold hover:text-ink disabled:opacity-0"
+                  >
+                    <ChevronLeft className="h-5 w-5" strokeWidth={1.7} />
+                  </button>
+
+                  <div className="flex flex-col items-center gap-1 text-center">
+                    <p className="eyebrow text-ink-faint">Confirmación</p>
+                    <p className="font-serif text-[1.6rem] leading-tight font-light text-ink">
+                      {guest.nombre}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label="Cerrar"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-powder text-ink-soft transition-colors hover:border-gold hover:text-ink"
+                  >
+                    <X className="h-5 w-5" strokeWidth={1.7} />
+                  </button>
                 </div>
 
                 <div className="relative flex min-h-[19rem] w-full items-start">
@@ -320,20 +376,25 @@ export function RsvpDialog({
                         title="¿Cuántos vendrán?"
                         hint={"Tu invitación incluye hasta " + guest.cupo + " personas."}
                       >
-                        <div className="flex items-center gap-6">
-                          <button
-                            type="button"
-                            aria-label="Quitar una persona"
+                        <div className="flex items-end justify-center gap-5 sm:gap-7">
+                          <Paso
+                            etiqueta="Retirar"
+                            signo="−"
+                            aria="Retirar una persona"
+                            desactivado={answer.count <= 1}
                             onClick={() => setCount(answer.count - 1)}
-                            className="grid h-12 w-12 place-items-center rounded-full border border-powder text-xl text-ink-soft transition-colors hover:border-gold hover:text-ink"
-                          >
-                            −
-                          </button>
+                          />
+
+                          {/*
+                            La cifra va en la tipografía de palo. En Cormorant
+                            el uno se dibuja como una I con serifas y se leía
+                            como número romano.
+                          */}
                           <div className="relative h-16 w-16 overflow-hidden">
                             <AnimatePresence mode="popLayout" initial={false}>
                               <motion.span
                                 key={answer.count}
-                                className="absolute inset-0 grid place-items-center font-serif text-5xl font-light text-ink"
+                                className="absolute inset-0 grid place-items-center font-sans text-5xl font-light tabular-nums text-ink"
                                 initial={{ y: 24, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 exit={{ y: -24, opacity: 0 }}
@@ -343,14 +404,14 @@ export function RsvpDialog({
                               </motion.span>
                             </AnimatePresence>
                           </div>
-                          <button
-                            type="button"
-                            aria-label="Agregar una persona"
+
+                          <Paso
+                            etiqueta="Añadir"
+                            signo="+"
+                            aria="Añadir una persona"
+                            desactivado={answer.count >= guest.cupo}
                             onClick={() => setCount(answer.count + 1)}
-                            className="grid h-12 w-12 place-items-center rounded-full border border-powder text-xl text-ink-soft transition-colors hover:border-gold hover:text-ink"
-                          >
-                            +
-                          </button>
+                          />
                         </div>
                         <ActionButton onClick={next}>Continuar</ActionButton>
                       </StepShell>
@@ -470,14 +531,7 @@ export function RsvpDialog({
                   </AnimatePresence>
                 </div>
 
-                <div className="mt-6 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={step === 0 ? onClose : back}
-                    className="font-sans text-[0.88rem] tracking-[0.26em] text-ink-faint uppercase transition-colors hover:text-ink"
-                  >
-                    {step === 0 ? "Cerrar" : "Atrás"}
-                  </button>
+                <div className="mt-6 flex items-center justify-center">
                   <div className="flex gap-1.5" aria-hidden>
                     {visibleSteps.map((s, i) => (
                       <span

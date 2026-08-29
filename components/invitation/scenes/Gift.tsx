@@ -72,13 +72,19 @@ function GiftEnvelope() {
   const reduced = useReducedMotion();
 
   return (
-    <button
+    /*
+     * Al abrirse, el sobre entero baja. Si no, la tarjeta que asoma sube por
+     * encima del título y "Lluvia de sobres" se lee "Lluvia de gracias".
+     */
+    <motion.button
       type="button"
       onClick={() => setOpen((v) => !v)}
       aria-expanded={open}
       aria-label={open ? "Cerrar el sobre" : "Abrir el sobre"}
       className="group relative mt-2 h-32 w-44 cursor-pointer"
       style={{ perspective: 900 }}
+      animate={{ y: open ? 42 : 0 }}
+      transition={{ duration: reduced ? 0.2 : 0.7, ease: EASE_SILK }}
     >
       <div className="absolute inset-0 rounded-[8px] bg-[linear-gradient(160deg,#fffdf7,#f0ead9)] shadow-[0_16px_36px_-24px_rgba(122,95,40,0.8)]" />
 
@@ -87,7 +93,7 @@ function GiftEnvelope() {
           <motion.div
             className="absolute inset-x-3 top-2 z-10 flex h-24 flex-col items-center justify-center gap-1 rounded-[5px] border border-gold/25 bg-white"
             initial={{ y: 10, opacity: 0 }}
-            animate={{ y: "-46%", opacity: 1 }}
+            animate={{ y: "-42%", opacity: 1 }}
             exit={{ y: 10, opacity: 0 }}
             transition={{ duration: 0.8, ease: EASE_SILK, delay: reduced ? 0 : 0.35 }}
           >
@@ -120,7 +126,7 @@ function GiftEnvelope() {
           Tócalo
         </span>
       )}
-    </button>
+    </motion.button>
   );
 }
 
@@ -161,7 +167,7 @@ export function Gift() {
         </Reveal>
 
         <Reveal delay={0.75}>
-          <p className="mt-14 max-w-xs font-sans text-[0.95rem] leading-relaxed text-ink-faint">
+          <p className="mt-20 max-w-xs font-sans text-[0.95rem] leading-relaxed text-ink-faint">
             {wedding.copy.gift.note}
           </p>
         </Reveal>

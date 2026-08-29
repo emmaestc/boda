@@ -102,7 +102,6 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
               </p>
             </Reveal>
 
-            <RsvpDialog guest={guest} open={open} onClose={() => setOpen(false)} />
           </>
         ) : (
           <Reveal delay={0.45} className="mt-8">
@@ -117,6 +116,16 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
           </Reveal>
         )}
       </div>
+
+      {/*
+        El diálogo vive FUERA del contenedor con `isolate`. Ese aislamiento es
+        el que mantiene la botánica detrás del texto, pero también encierra el
+        apilado: dentro de él, el z-index del diálogo no puede competir con el
+        control de música, que es hermano de la escena.
+      */}
+      {guest && (
+        <RsvpDialog guest={guest} open={open} onClose={() => setOpen(false)} />
+      )}
     </Scene>
   );
 }

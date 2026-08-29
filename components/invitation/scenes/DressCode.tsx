@@ -47,7 +47,7 @@ function Medallon() {
         viewport={inViewOnce}
         transition={{ duration: 1, ease: EASE_SILK, delay: 0.5 }}
       >
-        <Novios className="h-[5.4rem] w-[5.4rem]" />
+        <Novios className="h-[6rem] w-[6rem]" />
       </motion.div>
     </div>
   );

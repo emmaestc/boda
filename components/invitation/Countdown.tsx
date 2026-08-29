@@ -34,18 +34,23 @@ function subscribe(onChange: () => void): () => void {
   };
 }
 
+/*
+ * Sin segundero. Con cuatro celdas la fila se partía en dos en cualquier
+ * teléfono, y un contador a dos líneas pierde toda la fuerza; además el
+ * segundo que corre distrae de la cifra que de verdad importa, que son los
+ * días. Con tres, entra holgado incluso en pantallas de 320 px.
+ */
 const LABELS = [
   { key: "días", divisor: 86400 },
   { key: "horas", divisor: 3600, modulo: 24 },
   { key: "min", divisor: 60, modulo: 60 },
-  { key: "seg", divisor: 1, modulo: 60 },
 ] as const;
 
 /** Un dígito que rueda al cambiar, en lugar de parpadear. */
 function Unit({ value, label }: { value: number; label: string }) {
   const text = String(value).padStart(2, "0");
   return (
-    <div className="relative flex min-w-[4.4rem] flex-col items-center gap-1 rounded-2xl border border-gold/30 bg-white/60 px-2 py-3.5 sm:min-w-[5rem]">
+    <div className="relative flex min-w-[4.2rem] flex-1 flex-col items-center gap-1 rounded-2xl border border-gold/30 bg-white/60 px-1.5 py-3.5 sm:min-w-[5rem] sm:flex-none">
       {/* Esquinas marcadas: el detalle que convierte una cifra en una pieza */}
       <span className="pointer-events-none absolute left-1.5 top-1.5 h-2 w-2 border-l border-t border-gold/55" />
       <span className="pointer-events-none absolute right-1.5 top-1.5 h-2 w-2 border-r border-t border-gold/55" />
@@ -93,7 +98,7 @@ export function Countdown() {
 
   return (
     <div
-      className="flex flex-wrap items-center justify-center gap-y-3"
+      className="flex flex-nowrap items-center justify-center"
       role="timer"
       aria-live="off"
       aria-label={"Faltan " + days + " días para la ceremonia"}
@@ -106,7 +111,7 @@ export function Countdown() {
             {i > 0 && (
               <span
                 aria-hidden
-                className="mx-0.5 block h-1.5 w-1.5 rotate-45 border border-gold/70 sm:mx-1.5"
+                className="mx-1 block h-1.5 w-1.5 shrink-0 rotate-45 border border-gold/70 sm:mx-2"
               />
             )}
             <Unit value={value} label={unit.key} />

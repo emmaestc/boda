@@ -96,7 +96,7 @@ export function Prelude({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: EASE_SILK, delay: 0.25 }}
         >
-          <p className="font-serif text-[1.6rem] leading-snug font-light text-ink-soft italic sm:text-[1.6rem]">
+          <p className="max-w-[16rem] text-center font-serif text-[1.6rem] leading-snug font-light text-ink-soft italic sm:max-w-none">
             {wedding.copy.envelope.eyebrow}
           </p>
           {guestName && (
