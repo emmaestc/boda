@@ -110,7 +110,7 @@ body {
 /* Antetítulo: versalitas espaciadas, nunca por debajo de 14 px. */
 @utility eyebrow {
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 500;
   letter-spacing: 0.32em;
   text-transform: uppercase;

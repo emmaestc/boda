@@ -4,115 +4,86 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useMediaQuery } from "@/hooks/useEnvironment";
 import {
   Aliento,
-  Bayas,
+  Anemona,
+  Capullos,
+  Delfinio,
   Eucalipto,
-  FlorMalva,
-  Olivo,
-  Peonia,
-  Rosa,
+  Follaje,
+  Hortensia,
+  RosaBlanca,
+  RosaCrema,
 } from "@/components/art/Botanical";
 
 /**
  * Marco floral de la pantalla.
  *
- * Va fijo al viewport, no dentro del documento: así las flores enmarcan la
- * lectura como el paspartú de un cuadro en lugar de pasar por encima del
- * texto al desplazarse. Tres decisiones lo hacen seguro para el contenido:
+ * Va fijo al viewport, no dentro del documento: enmarca la lectura como el
+ * paspartú de un cuadro en lugar de desfilar por encima del texto. Está
+ * pensado para el teléfono primero, que es donde se va a ver casi siempre:
+ * los ramos se componen para leerse bien a unos 130 píxeles, con una flor
+ * protagonista clara en vez de muchas pequeñas que a ese tamaño se
+ * convierten en manchas.
  *
- *  - Cada ramo se ancla a su esquina y lleva una máscara radial que lo
- *    disuelve hacia el centro, de modo que nunca hay un borde duro sobre una
- *    palabra.
- *  - El tamaño se calcula con `vmin`, no con `vw`: en un móvil apaisado o en
- *    una pantalla muy ancha el ramo no se dispara.
- *  - Los ramos grandes van arriba a la izquierda y abajo a la derecha, que es
- *    por donde el contenido —centrado y con ancho máximo— no pasa.
+ * Tres decisiones lo mantienen fuera del texto, comprobadas midiendo el
+ * solape real entre cajas: máscara radial que lo disuelve hacia el centro,
+ * tamaño en `vmin` (no `vw`, para que en apaisado no se dispare) y un
+ * desbordamiento leve fuera del borde para que el peso quede en la esquina.
  */
 
-/** Un ramo. Dos composiciones distintas para que las esquinas no se repitan. */
-function Ramo({ variante, ligero }: { variante: "a" | "b"; ligero: boolean }) {
-  if (variante === "a") {
-    return (
-      <g>
-        <Eucalipto t="translate(2 128) rotate(-38) scale(1.05)" opacity={0.92} />
-        <Olivo t="translate(-6 58) rotate(24) scale(0.95)" opacity={0.85} />
-        <Eucalipto t="translate(44 6) rotate(34) scale(0.8)" opacity={0.8} />
-        <Bayas t="translate(96 96) rotate(18) scale(1.05)" opacity={0.9} />
-        <Aliento t="translate(104 34) scale(1.1)" opacity={0.9} />
-        <Peonia t="translate(34 106) scale(0.9)" />
-        <Rosa t="translate(78 58) scale(1.02)" />
-        {!ligero && <FlorMalva t="translate(26 46) scale(0.78)" />}
-        {!ligero && <Rosa t="translate(112 118) scale(0.62)" opacity={0.95} />}
-      </g>
-    );
-  }
+/** Ramo con rosa blanca de protagonista. */
+function RamoA({ ligero }: { ligero: boolean }) {
   return (
     <g>
-      <Olivo t="translate(0 120) rotate(-30) scale(1.1)" opacity={0.88} />
-      <Eucalipto t="translate(6 48) rotate(18) scale(0.9)" opacity={0.82} />
-      <Aliento t="translate(78 18) scale(1)" opacity={0.85} />
-      <Bayas t="translate(30 40) rotate(-12) scale(0.9)" opacity={0.85} />
-      <Peonia t="translate(88 74) scale(1.02)" />
-      <Rosa t="translate(38 92) scale(0.86)" />
-      {!ligero && <FlorMalva t="translate(104 122) scale(0.9)" />}
-      {!ligero && <Aliento t="translate(6 88) scale(0.85)" opacity={0.8} />}
+      <Follaje t="translate(-4 146) rotate(-44) scale(1)" opacity={0.9} />
+      <Eucalipto t="translate(-8 62) rotate(18) scale(0.95)" opacity={0.9} />
+      <Eucalipto t="translate(58 0) rotate(44) scale(0.72)" opacity={0.85} />
+      <Hortensia t="translate(36 116) scale(0.92)" />
+      <RosaBlanca t="translate(76 66) scale(1.02)" />
+      <Capullos t="translate(112 26) scale(0.9)" opacity={0.9} />
+      {!ligero && <Anemona t="translate(120 124) scale(0.6)" />}
+      {!ligero && <Aliento t="translate(132 76) scale(0.9)" opacity={0.85} />}
     </g>
   );
 }
 
+/** Ramo con anémona de protagonista y una espiga azul. */
+function RamoB({ ligero }: { ligero: boolean }) {
+  return (
+    <g>
+      <Eucalipto t="translate(-6 132) rotate(-36) scale(1.05)" opacity={0.9} />
+      <Follaje t="translate(2 54) rotate(14) scale(0.88)" opacity={0.85} />
+      <Delfinio t="translate(30 108) rotate(-10) scale(1)" />
+      <Anemona t="translate(88 72) scale(0.98)" />
+      <RosaCrema t="translate(44 130) scale(0.7)" />
+      {!ligero && <Capullos t="translate(112 118) scale(0.85)" opacity={0.9} />}
+      {!ligero && <Aliento t="translate(100 22) scale(0.85)" opacity={0.85} />}
+    </g>
+  );
+}
+
+const MASCARA =
+  "radial-gradient(circle at 0% 0%, #000 32%, rgba(0,0,0,0.5) 54%, rgba(0,0,0,0.14) 72%, transparent 84%)";
+
 type Esquina = {
   clase: string;
-  variante: "a" | "b";
-  /** Giro y espejo para que cada ramo nazca de su propia esquina. */
+  ramo: "a" | "b";
   transform: string;
   /** Los ramos no miden todos igual: eso es lo que evita el efecto plantilla. */
   escala: number;
-  mascara: string;
   respiro: number;
 };
 
 const ESQUINAS: Esquina[] = [
-  {
-    clase: "left-0 top-0",
-    variante: "a",
-    transform: "none",
-    escala: 1,
-    mascara:
-      "radial-gradient(circle at 0% 0%, #000 30%, rgba(0,0,0,0.45) 52%, rgba(0,0,0,0.12) 70%, transparent 82%)",
-    respiro: 0,
-  },
-  {
-    clase: "right-0 top-0",
-    variante: "b",
-    transform: "scaleX(-1)",
-    escala: 0.82,
-    mascara:
-      "radial-gradient(circle at 0% 0%, #000 30%, rgba(0,0,0,0.45) 52%, rgba(0,0,0,0.12) 70%, transparent 82%)",
-    respiro: 2.5,
-  },
-  {
-    clase: "right-0 bottom-0",
-    variante: "a",
-    transform: "scale(-1)",
-    escala: 1.08,
-    mascara:
-      "radial-gradient(circle at 0% 0%, #000 30%, rgba(0,0,0,0.45) 52%, rgba(0,0,0,0.12) 70%, transparent 82%)",
-    respiro: 5,
-  },
-  {
-    clase: "left-0 bottom-0",
-    variante: "b",
-    transform: "scaleY(-1)",
-    escala: 0.88,
-    mascara:
-      "radial-gradient(circle at 0% 0%, #000 30%, rgba(0,0,0,0.45) 52%, rgba(0,0,0,0.12) 70%, transparent 82%)",
-    respiro: 7.5,
-  },
+  { clase: "left-0 top-0", ramo: "a", transform: "none", escala: 1, respiro: 0 },
+  { clase: "right-0 top-0", ramo: "b", transform: "scaleX(-1)", escala: 0.8, respiro: 2.5 },
+  { clase: "right-0 bottom-0", ramo: "a", transform: "scale(-1)", escala: 1.06, respiro: 5 },
+  { clase: "left-0 bottom-0", ramo: "b", transform: "scaleY(-1)", escala: 0.86, respiro: 7.5 },
 ];
 
 export function FloralFrame() {
   const reduced = useReducedMotion();
-  // En un teléfono, menos piezas por ramo: el efecto es el mismo y el
-  // navegador tiene bastante menos que rasterizar.
+  // En el teléfono, ramos con menos piezas: a ese tamaño las de relleno no se
+  // distinguen y solo cuestan rasterizado.
   const ligero = useMediaQuery("(max-width: 767px)");
 
   return (
@@ -122,23 +93,27 @@ export function FloralFrame() {
           key={esquina.clase}
           className={"absolute " + esquina.clase}
           style={{
-            width: "clamp(112px, " + 30 * esquina.escala + "vmin, " + 320 * esquina.escala + "px)",
+            // El mínimo también se escala: si no, en el teléfono los cuatro
+            // ramos acaban del mismo tamaño y se nota la plantilla.
+            width:
+              "clamp(" + Math.round(128 * esquina.escala) + "px, " +
+              32 * esquina.escala + "vmin, " +
+              Math.round(320 * esquina.escala) + "px)",
             aspectRatio: "1 / 1",
-            // Un pelín fuera de pantalla: el ramo nace del borde, no flota
-            // dentro de él, y libera espacio para el texto.
-            margin: "-3.5%",
+            // Asomando un poco fuera: el ramo nace del borde y libera la
+            // columna de lectura.
+            margin: "-4%",
             transform: esquina.transform,
-            maskImage: esquina.mascara,
-            WebkitMaskImage: esquina.mascara,
+            maskImage: MASCARA,
+            WebkitMaskImage: MASCARA,
           }}
           /*
            * Solo respira la opacidad. Animar `scale` o `rotate` sobre un
-           * subárbol con filtros SVG obliga al navegador a volver a
-           * rasterizar las 180 formas del ramo en cada fotograma; la
-           * opacidad la aplica el compositor por encima del filtro ya
-           * calculado y no cuesta nada.
+           * subárbol con filtros SVG obliga al navegador a rasterizar de nuevo
+           * todas las formas del ramo en cada fotograma; la opacidad la aplica
+           * el compositor sobre el mapa de bits ya calculado.
            */
-          animate={reduced ? undefined : { opacity: [0.9, 1, 0.9] }}
+          animate={reduced ? undefined : { opacity: [0.88, 1, 0.88] }}
           transition={{
             duration: 14,
             repeat: Infinity,
@@ -147,29 +122,29 @@ export function FloralFrame() {
           }}
         >
           <svg viewBox="0 0 200 200" className="h-full w-full overflow-visible">
-            <Ramo variante={esquina.variante} ligero={ligero} />
+            {esquina.ramo === "a" ? <RamoA ligero={ligero} /> : <RamoB ligero={ligero} />}
           </svg>
         </motion.div>
       ))}
 
-      {/* Ramitas sueltas a media altura, para que los laterales no queden
-          vacíos entre esquina y esquina. Muy tenues: solo insinúan. */}
+      {/* Ramitas a media altura para que los laterales no queden vacíos.
+          Solo en pantallas anchas: en el teléfono no hay sitio. */}
       <div
-        className="absolute left-0 top-1/2 hidden w-[12vmin] max-w-[130px] -translate-y-1/2 opacity-55 sm:block"
+        className="absolute left-0 top-1/2 hidden w-[13vmin] max-w-[140px] -translate-y-1/2 opacity-60 sm:block"
         style={{ aspectRatio: "1 / 1" }}
       >
         <svg viewBox="0 0 120 120" className="h-full w-full overflow-visible">
-          <Eucalipto t="translate(-30 60) rotate(-8) scale(0.85)" />
-          <Aliento t="translate(-6 34) scale(0.7)" opacity={0.8} />
+          <Eucalipto t="translate(-34 62) rotate(-6) scale(0.85)" />
+          <Capullos t="translate(-4 34) scale(0.75)" opacity={0.85} />
         </svg>
       </div>
       <div
-        className="absolute right-0 top-1/2 hidden w-[12vmin] max-w-[130px] -translate-y-1/2 opacity-55 sm:block"
+        className="absolute right-0 top-1/2 hidden w-[13vmin] max-w-[140px] opacity-60 sm:block"
         style={{ aspectRatio: "1 / 1", transform: "translateY(-50%) scaleX(-1)" }}
       >
         <svg viewBox="0 0 120 120" className="h-full w-full overflow-visible">
-          <Olivo t="translate(-30 62) rotate(-6) scale(0.9)" />
-          <Bayas t="translate(10 36) scale(0.7)" opacity={0.85} />
+          <Follaje t="translate(-34 64) rotate(-4) scale(0.9)" />
+          <Aliento t="translate(2 36) scale(0.7)" opacity={0.85} />
         </svg>
       </div>
     </div>

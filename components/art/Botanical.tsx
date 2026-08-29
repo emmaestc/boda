@@ -1,249 +1,343 @@
 /**
- * Botánica en acuarela.
+ * Botánica en acuarela — blanco, tono tarjeta y azul.
  *
- * El encargo era que las flores se vieran realistas, no vectoriales. Tres
- * técnicas lo consiguen sin una sola imagen:
+ * La versión anterior dibujaba cada pétalo con su contorno, y ahí estaba el
+ * problema: una flor pintada no tiene línea, tiene masa de color. Lo que hace
+ * que algo se lea como acuarela y no como vector son cuatro cosas, y aquí
+ * están las cuatro:
  *
- *  1. `feTurbulence` + `feDisplacementMap` deforma los bordes de cada forma de
- *     manera irregular, que es justo lo que distingue un trazo pintado de uno
- *     dibujado con el ratón.
- *  2. Cada pétalo lleva un degradado radial que va de claro en el centro a
- *     saturado en el borde, imitando el pigmento que se acumula donde el agua
- *     se seca.
- *  3. Las formas se superponen con transparencia, de modo que los solapes
- *     oscurecen igual que dos capas de acuarela húmeda.
- *
- * Los degradados y el filtro viven en un `<defs>` único (`BotanicalDefs`) que
- * se monta una sola vez: los identificadores de SVG son globales al documento,
- * así que cualquier flor de cualquier parte de la página los encuentra.
+ *  1. **Sin contornos.** Solo relleno. La forma la define el color, no una
+ *     raya alrededor.
+ *  2. **Estructura de valor.** Debajo de los pétalos va una capa de sombra
+ *     difuminada y encima una de luz. Es lo que da volumen; sin ello una flor
+ *     parece una pegatina por muchos pétalos que tenga.
+ *  3. **Bordes rotos y blandos.** `feTurbulence` + `feDisplacementMap`
+ *     deforma el contorno de forma irregular y un desenfoque posterior lo
+ *     ablanda, igual que el agua al correrse por el papel.
+ *  4. **Pigmento acumulado.** Cada pétalo lleva un degradado que va de claro
+ *     en la punta a saturado en la base, que es por donde el agua se seca la
+ *     última.
  */
 
 export function BotanicalDefs() {
   return (
-    <svg
-      aria-hidden
-      width="0"
-      height="0"
-      className="pointer-events-none absolute"
-      style={{ position: "absolute" }}
-    >
+    <svg aria-hidden width="0" height="0" style={{ position: "absolute" }}>
       <defs>
-        {/* El temblor del papel: bordes irregulares, como pintados a mano. */}
-        <filter id="acuarela" x="-15%" y="-15%" width="130%" height="130%">
+        {/* Borde roto y blando: el gesto del pincel sobre papel granulado. */}
+        <filter id="acuarela" x="-20%" y="-20%" width="140%" height="140%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.022 0.028"
+            baseFrequency="0.016 0.021"
             numOctaves="4"
-            seed="7"
-            result="ruido"
+            seed="9"
+            result="grano"
           />
           <feDisplacementMap
             in="SourceGraphic"
-            in2="ruido"
-            scale="5.5"
+            in2="grano"
+            scale="7"
             xChannelSelector="R"
             yChannelSelector="G"
+            result="roto"
           />
+          <feGaussianBlur in="roto" stdDeviation="0.7" />
         </filter>
 
-        {/* Una versión más suave, para las hojas pequeñas. */}
-        <filter id="acuarela-suave" x="-15%" y="-15%" width="130%" height="130%">
+        {/* Para las hojas: menos temblor, algo más de nitidez. */}
+        <filter id="acuarela-hoja" x="-20%" y="-20%" width="140%" height="140%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.03 0.035"
+            baseFrequency="0.024 0.03"
             numOctaves="3"
-            seed="21"
-            result="ruido2"
+            seed="23"
+            result="grano2"
           />
           <feDisplacementMap
             in="SourceGraphic"
-            in2="ruido2"
-            scale="3"
+            in2="grano2"
+            scale="4"
             xChannelSelector="R"
             yChannelSelector="G"
+            result="roto2"
           />
+          <feGaussianBlur in="roto2" stdDeviation="0.45" />
         </filter>
 
-        <radialGradient id="petalo-rosa" cx="42%" cy="70%" r="72%">
-          <stop offset="0%" stopColor="#fdeceb" />
-          <stop offset="55%" stopColor="#f1c8c4" />
-          <stop offset="100%" stopColor="#d99a94" />
-        </radialGradient>
-
-        <radialGradient id="petalo-crema" cx="45%" cy="72%" r="72%">
-          <stop offset="0%" stopColor="#fffdf8" />
-          <stop offset="58%" stopColor="#f5e9d4" />
-          <stop offset="100%" stopColor="#dcc7a4" />
-        </radialGradient>
-
-        <radialGradient id="petalo-malva" cx="45%" cy="70%" r="72%">
-          <stop offset="0%" stopColor="#f6eef5" />
-          <stop offset="55%" stopColor="#d8c1d6" />
-          <stop offset="100%" stopColor="#b094ad" />
-        </radialGradient>
-
-        <linearGradient id="hoja-salvia" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#d9e5d4" />
-          <stop offset="50%" stopColor="#adc4a7" />
-          <stop offset="100%" stopColor="#82a07c" />
+        {/* --- Blancos: nunca blanco puro, siempre con sombra azulada --- */}
+        <linearGradient id="petalo-blanco" x1="0.5" y1="1" x2="0.45" y2="0">
+          <stop offset="0%" stopColor="#c3d4e5" />
+          <stop offset="32%" stopColor="#e6eef6" />
+          <stop offset="70%" stopColor="#fbfcfe" />
+          <stop offset="100%" stopColor="#ffffff" />
+        </linearGradient>
+        <linearGradient id="petalo-blanco-hondo" x1="0.5" y1="1" x2="0.45" y2="0">
+          <stop offset="0%" stopColor="#a8bed3" />
+          <stop offset="40%" stopColor="#d7e3ef" />
+          <stop offset="100%" stopColor="#f6f9fc" />
         </linearGradient>
 
-        <linearGradient id="hoja-oliva" x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0%" stopColor="#c6d6bd" />
-          <stop offset="55%" stopColor="#9bb491" />
-          <stop offset="100%" stopColor="#6f8b68" />
+        {/* --- Tono de la tarjeta: crema porcelana --- */}
+        <linearGradient id="petalo-crema" x1="0.5" y1="1" x2="0.45" y2="0">
+          <stop offset="0%" stopColor="#dcc9a8" />
+          <stop offset="38%" stopColor="#f2e7d3" />
+          <stop offset="100%" stopColor="#fffdf8" />
         </linearGradient>
 
-        <radialGradient id="baya" cx="35%" cy="32%" r="70%">
-          <stop offset="0%" stopColor="#e8d9e6" />
-          <stop offset="60%" stopColor="#c4a7c1" />
-          <stop offset="100%" stopColor="#9c7f99" />
-        </radialGradient>
+        {/* --- Azules --- */}
+        <linearGradient id="petalo-azul" x1="0.5" y1="1" x2="0.45" y2="0">
+          <stop offset="0%" stopColor="#5b86b5" />
+          <stop offset="35%" stopColor="#93b7dc" />
+          <stop offset="78%" stopColor="#cfe0f2" />
+          <stop offset="100%" stopColor="#eaf2fa" />
+        </linearGradient>
+        <linearGradient id="petalo-azul-claro" x1="0.5" y1="1" x2="0.45" y2="0">
+          <stop offset="0%" stopColor="#8fb3d8" />
+          <stop offset="45%" stopColor="#c2d8ee" />
+          <stop offset="100%" stopColor="#f0f6fc" />
+        </linearGradient>
 
-        <radialGradient id="corazon-flor" cx="50%" cy="50%" r="60%">
-          <stop offset="0%" stopColor="#f6d98a" />
-          <stop offset="100%" stopColor="#d3ae5e" />
+        {/* --- Follaje con matiz azulado, para que case con la paleta --- */}
+        <linearGradient id="hoja-verde" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stopColor="#6f8f86" />
+          <stop offset="45%" stopColor="#9db8ab" />
+          <stop offset="100%" stopColor="#d2e0d8" />
+        </linearGradient>
+        <linearGradient id="hoja-eucalipto" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stopColor="#7f9dac" />
+          <stop offset="50%" stopColor="#adc3cd" />
+          <stop offset="100%" stopColor="#dce7ec" />
+        </linearGradient>
+
+        {/* Sombra que se pinta DEBAJO de la flor para asentarla. */}
+        <radialGradient id="asiento" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#8ea7bd" stopOpacity="0.5" />
+          <stop offset="100%" stopColor="#8ea7bd" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id="corazon-claro" cx="50%" cy="45%" r="55%">
+          <stop offset="0%" stopColor="#f7e6b4" />
+          <stop offset="100%" stopColor="#d9bd7f" stopOpacity="0.75" />
         </radialGradient>
       </defs>
     </svg>
   );
 }
 
-type Colocacion = { t?: string; opacity?: number };
+type Puesta = { t?: string; opacity?: number };
 
-/** Pétalo suelto, la pieza con la que se construyen rosa y peonía. */
-function Petalo({ t = "", relleno }: { t?: string; relleno: string }) {
+/** Un pétalo. Sin contorno: solo masa de color con su degradado. */
+function Petalo({ t, relleno, o = 1 }: { t: string; relleno: string; o?: number }) {
   return (
     <path
       transform={t}
-      d="M0 0C-13 -5 -21 -19 -16 -32c4-11 17-16 27-11 11 5 15 19 10 31C18 -4 9 3 0 0Z"
+      d="M0 0C-17 -7-25 -23-14 -35-6 -44 8 -44 16 -35 27 -23 17 -7 0 0Z"
       fill={relleno}
-      stroke="#c9a49e"
-      strokeOpacity="0.32"
-      strokeWidth="0.7"
+      opacity={o}
     />
   );
 }
 
-/** Rosa de jardín vista desde arriba: corona de pétalos y espiral central. */
-export function Rosa({ t = "", opacity = 1 }: Colocacion) {
+/**
+ * Rosa de jardín blanca. Tres coronas de pétalos que van reduciendo,
+ * asentada sobre su propia sombra y con el cogollo en crema.
+ */
+export function RosaBlanca({ t = "", opacity = 1 }: Puesta) {
   return (
-    <g transform={t} opacity={opacity} filter="url(#acuarela)">
-      {[0, 51, 103, 154, 206, 257, 309].map((a, i) => (
-        <Petalo key={a} t={"rotate(" + a + ") scale(" + (1 - (i % 3) * 0.06) + ")"} relleno="url(#petalo-rosa)" />
-      ))}
-      {[26, 98, 170, 242, 314].map((a) => (
-        <Petalo key={"i" + a} t={"rotate(" + a + ") scale(0.6)"} relleno="url(#petalo-rosa)" />
-      ))}
-      {/* El cogollo del centro, enrollado */}
+    <g transform={t} opacity={opacity}>
+      {/* La sombra va fuera del filtro para que quede realmente difusa */}
+      <ellipse cx="2" cy="4" rx="40" ry="36" fill="url(#asiento)" />
+      <g filter="url(#acuarela)">
+        {/* Corona exterior */}
+        {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => (
+          <Petalo key={a} t={"rotate(" + a + ") scale(1.12)"} relleno="url(#petalo-blanco-hondo)" />
+        ))}
+        {/* Corona intermedia, girada para tapar las juntas */}
+        {[22, 67, 112, 157, 202, 247, 292, 337].map((a) => (
+          <Petalo key={"m" + a} t={"rotate(" + a + ") scale(0.82)"} relleno="url(#petalo-blanco)" />
+        ))}
+        {/* Corona interior */}
+        {[10, 82, 154, 226, 298].map((a) => (
+          <Petalo key={"i" + a} t={"rotate(" + a + ") scale(0.5)"} relleno="url(#petalo-blanco)" />
+        ))}
+        {/* Cogollo enrollado */}
+        <ellipse cx="0" cy="-3" rx="8" ry="7" fill="url(#petalo-crema)" />
+        <path d="M-5 -2C-7 -8-2 -12 3 -10 7 -8 7 -2 3 0" fill="none" stroke="#d8c49c" strokeWidth="2" opacity="0.55" />
+      </g>
+    </g>
+  );
+}
+
+/** La misma rosa en tono tarjeta, para variar sin romper la paleta. */
+export function RosaCrema({ t = "", opacity = 1 }: Puesta) {
+  return (
+    <g transform={t} opacity={opacity}>
+      <ellipse cx="2" cy="4" rx="38" ry="34" fill="url(#asiento)" />
+      <g filter="url(#acuarela)">
+        {[0, 51, 102, 153, 204, 255, 306].map((a) => (
+          <Petalo key={a} t={"rotate(" + a + ") scale(1.05)"} relleno="url(#petalo-crema)" o={0.95} />
+        ))}
+        {[26, 77, 128, 179, 230, 281, 332].map((a) => (
+          <Petalo key={"m" + a} t={"rotate(" + a + ") scale(0.74)"} relleno="url(#petalo-crema)" />
+        ))}
+        {[40, 130, 220, 310].map((a) => (
+          <Petalo key={"i" + a} t={"rotate(" + a + ") scale(0.46)"} relleno="url(#petalo-blanco)" />
+        ))}
+        <circle cx="0" cy="-2" r="6" fill="url(#corazon-claro)" />
+      </g>
+    </g>
+  );
+}
+
+/**
+ * Anémona blanca de corazón oscuro. Es la flor que más "lee" de lejos:
+ * el contraste del centro la hace reconocible al instante.
+ */
+export function Anemona({ t = "", opacity = 1 }: Puesta) {
+  return (
+    <g transform={t} opacity={opacity}>
+      <ellipse cx="1" cy="3" rx="30" ry="27" fill="url(#asiento)" />
+      <g filter="url(#acuarela)">
+        {[0, 51, 103, 154, 206, 257, 309].map((a) => (
+          <path
+            key={a}
+            transform={"rotate(" + a + ")"}
+            d="M0 0C-13 -6-19 -19-11 -28-4 -35 6 -35 12 -28 20 -19 13 -6 0 0Z"
+            fill="url(#petalo-blanco)"
+          />
+        ))}
+        {/* Corazón: azul muy oscuro, no negro, para no ensuciar la paleta */}
+        <circle cx="0" cy="-1" r="7.5" fill="#2f4257" opacity="0.9" />
+        <circle cx="0" cy="-1" r="4" fill="#1e2f40" />
+        {[0, 40, 80, 120, 160, 200, 240, 280, 320].map((a) => (
+          <line
+            key={a}
+            x1="0"
+            y1="-1"
+            x2="0"
+            y2="-11"
+            transform={"rotate(" + a + ")"}
+            stroke="#48607a"
+            strokeWidth="1.3"
+            strokeLinecap="round"
+            opacity="0.75"
+          />
+        ))}
+      </g>
+    </g>
+  );
+}
+
+/**
+ * Hortensia azul: un domo de floretes de cuatro pétalos. La gracia está en
+ * que cada florete tenga su propio tono, como en la flor real.
+ */
+export function Hortensia({ t = "", opacity = 1 }: Puesta) {
+  const floretes = [
+    [0, 0, 1, 0],
+    [-16, -6, 0.92, 18],
+    [15, -8, 0.95, -22],
+    [-9, 11, 0.88, 40],
+    [12, 12, 0.9, -12],
+    [-24, 6, 0.8, 8],
+    [25, 4, 0.82, 30],
+    [2, -18, 0.86, -8],
+    [-14, -19, 0.74, 24],
+    [17, -20, 0.76, -30],
+    [-2, 22, 0.78, 16],
+  ] as const;
+
+  return (
+    <g transform={t} opacity={opacity}>
+      <ellipse cx="0" cy="2" rx="34" ry="28" fill="url(#asiento)" />
+      <g filter="url(#acuarela)">
+        {floretes.map(([x, y, s, r], i) => (
+          <g key={i} transform={"translate(" + x + " " + y + ") rotate(" + r + ") scale(" + s + ")"}>
+            {[0, 90, 180, 270].map((a) => (
+              <ellipse
+                key={a}
+                cx="0"
+                cy="-6.5"
+                rx="5.2"
+                ry="6.8"
+                transform={"rotate(" + a + ")"}
+                fill={i % 3 === 0 ? "url(#petalo-azul)" : "url(#petalo-azul-claro)"}
+              />
+            ))}
+            <circle cx="0" cy="0" r="1.9" fill="#f4e9c6" opacity="0.9" />
+          </g>
+        ))}
+      </g>
+    </g>
+  );
+}
+
+/** Espiga de delfinio: los azules en vertical que rompen la horizontal. */
+export function Delfinio({ t = "", opacity = 1 }: Puesta) {
+  const flores = [
+    [0, 0, 1],
+    [-7, -14, 0.9],
+    [6, -25, 0.84],
+    [-5, -36, 0.74],
+    [4, -46, 0.62],
+    [-2, -55, 0.5],
+  ] as const;
+  return (
+    <g transform={t} opacity={opacity}>
+      <g filter="url(#acuarela)">
+        <path d="M0 6C-1 -10 1 -30 -1 -56" stroke="#8aa79b" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+        {flores.map(([x, y, s], i) => (
+          <g key={i} transform={"translate(" + x + " " + y + ") scale(" + s + ")"}>
+            {[0, 72, 144, 216, 288].map((a) => (
+              <ellipse
+                key={a}
+                cx="0"
+                cy="-6"
+                rx="4.4"
+                ry="6.2"
+                transform={"rotate(" + a + ")"}
+                fill={i % 2 ? "url(#petalo-azul-claro)" : "url(#petalo-azul)"}
+              />
+            ))}
+            <circle cx="0" cy="0" r="1.8" fill="#fdf6e0" opacity="0.85" />
+          </g>
+        ))}
+      </g>
+    </g>
+  );
+}
+
+/** Rama de eucalipto: hojas redondas opuestas, en verde azulado. */
+export function Eucalipto({ t = "", opacity = 1 }: Puesta) {
+  const pasos = [10, 22, 34, 46, 58, 70, 82, 94];
+  return (
+    <g transform={t} opacity={opacity} filter="url(#acuarela-hoja)">
       <path
-        d="M0 2c-6-2-9-8-6-13 3-4 9-5 12-1 4 4 3 11-2 13-4 2-8 0-9-4"
+        d="M0 0C16 -6 36 -12 58 -15c18 -2 34 -1 46 2"
         fill="none"
-        stroke="#c48f89"
-        strokeOpacity="0.6"
-        strokeWidth="1.5"
+        stroke="#8aa4ad"
+        strokeWidth="1.7"
         strokeLinecap="round"
       />
-      <circle cx="0" cy="-2" r="3.4" fill="#e7b4ad" opacity="0.75" />
-    </g>
-  );
-}
-
-/** Peonía color crema: más pétalos, más abiertos y más revueltos. */
-export function Peonia({ t = "", opacity = 1 }: Colocacion) {
-  return (
-    <g transform={t} opacity={opacity} filter="url(#acuarela)">
-      {[0, 40, 80, 120, 160, 200, 240, 280, 320].map((a, i) => (
-        <Petalo
-          key={a}
-          t={"rotate(" + a + ") scale(" + (1.08 - (i % 4) * 0.07) + ")"}
-          relleno="url(#petalo-crema)"
-        />
-      ))}
-      {[20, 92, 164, 236, 308].map((a) => (
-        <Petalo key={"i" + a} t={"rotate(" + a + ") scale(0.5)"} relleno="url(#petalo-crema)" />
-      ))}
-      <circle cx="0" cy="-1" r="5" fill="url(#corazon-flor)" opacity="0.85" />
-      {[0, 60, 120, 180, 240, 300].map((a) => (
-        <line
-          key={a}
-          x1="0"
-          y1="0"
-          x2="0"
-          y2="-7"
-          transform={"rotate(" + a + ")"}
-          stroke="#c9a45c"
-          strokeWidth="0.8"
-          strokeLinecap="round"
-          opacity="0.7"
-        />
-      ))}
-    </g>
-  );
-}
-
-/** Flor pequeña de relleno, en malva. */
-export function FlorMalva({ t = "", opacity = 1 }: Colocacion) {
-  return (
-    <g transform={t} opacity={opacity} filter="url(#acuarela-suave)">
-      {[0, 72, 144, 216, 288].map((a) => (
-        <ellipse
-          key={a}
-          cx="0"
-          cy="-11"
-          rx="7"
-          ry="11"
-          transform={"rotate(" + a + ")"}
-          fill="url(#petalo-malva)"
-          stroke="#a98ba6"
-          strokeOpacity="0.3"
-          strokeWidth="0.6"
-        />
-      ))}
-      <circle cx="0" cy="0" r="3.6" fill="url(#corazon-flor)" />
-    </g>
-  );
-}
-
-/** Rama de eucalipto: hojas redondas y opuestas a lo largo del tallo. */
-export function Eucalipto({ t = "", opacity = 1 }: Colocacion) {
-  const hojas = [12, 24, 36, 48, 60, 72, 84];
-  return (
-    <g transform={t} opacity={opacity} filter="url(#acuarela-suave)">
-      <path
-        d="M0 0C14 -6 32 -12 52 -14c16-2 30-1 40 2"
-        fill="none"
-        stroke="#8ba585"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-      {hojas.map((d, i) => {
-        const x = d * 1.05;
-        const y = -d * 0.2 - 2;
-        const r = 10 - i * 0.5;
+      {pasos.map((d, i) => {
+        const x = d * 1.06;
+        const y = -d * 0.19 - 2;
+        const r = 10.5 - i * 0.55;
         return (
           <g key={d}>
             <ellipse
               cx={x}
-              cy={y - 8}
-              rx={r * 0.8}
+              cy={y - 9}
+              rx={r * 0.82}
               ry={r}
-              transform={"rotate(" + (-24 + i * 4) + " " + x + " " + (y - 8) + ")"}
-              fill="url(#hoja-salvia)"
-              stroke="#7d9a78"
-              strokeOpacity="0.35"
-              strokeWidth="0.6"
+              transform={"rotate(" + (-26 + i * 4) + " " + x + " " + (y - 9) + ")"}
+              fill="url(#hoja-eucalipto)"
             />
             <ellipse
               cx={x}
-              cy={y + 8}
-              rx={r * 0.8}
+              cy={y + 9}
+              rx={r * 0.82}
               ry={r}
-              transform={"rotate(" + (24 - i * 4) + " " + x + " " + (y + 8) + ")"}
-              fill="url(#hoja-salvia)"
-              stroke="#7d9a78"
-              strokeOpacity="0.35"
-              strokeWidth="0.6"
+              transform={"rotate(" + (26 - i * 4) + " " + x + " " + (y + 9) + ")"}
+              fill="url(#hoja-eucalipto)"
             />
           </g>
         );
@@ -252,94 +346,84 @@ export function Eucalipto({ t = "", opacity = 1 }: Colocacion) {
   );
 }
 
-/** Rama de olivo: hoja lanceolada, más estrecha y más oscura. */
-export function Olivo({ t = "", opacity = 1 }: Colocacion) {
-  const hojas = [10, 22, 34, 46, 58, 70, 82, 94];
+/** Rama de hoja lanceolada, más verde y más oscura: da profundidad. */
+export function Follaje({ t = "", opacity = 1 }: Puesta) {
+  const pasos = [8, 20, 32, 44, 56, 68, 80, 92, 104];
   return (
-    <g transform={t} opacity={opacity} filter="url(#acuarela-suave)">
+    <g transform={t} opacity={opacity} filter="url(#acuarela-hoja)">
       <path
-        d="M0 0C20 -4 46 -10 70 -18c14-5 24-9 32-13"
+        d="M0 0C22 -5 50 -12 76 -21c15 -5 26 -10 34 -14"
         fill="none"
-        stroke="#78916f"
-        strokeWidth="1.4"
+        stroke="#7b9384"
+        strokeWidth="1.5"
         strokeLinecap="round"
       />
-      {hojas.map((d, i) => {
-        const x = d;
-        const y = -d * 0.28;
-        const giro = i % 2 === 0 ? -52 : 44;
-        return (
-          <path
-            key={d}
-            transform={"translate(" + x + " " + y + ") rotate(" + giro + ")"}
-            d="M0 0c3-9 9-15 15-16-1 7-6 14-15 16Z"
-            fill="url(#hoja-oliva)"
-            stroke="#6f8b68"
-            strokeOpacity="0.35"
-            strokeWidth="0.5"
-          />
-        );
-      })}
+      {pasos.map((d, i) => (
+        <path
+          key={d}
+          transform={
+            "translate(" + d * 1.05 + " " + -d * 0.27 + ") rotate(" + (i % 2 === 0 ? -56 : 40) + ")"
+          }
+          d="M0 0C4 -11 11 -18 19 -20 17 -11 11 -3 0 0Z"
+          fill="url(#hoja-verde)"
+        />
+      ))}
     </g>
   );
 }
 
-/** Racimo de bayas. Aporta los puntos oscuros que dan profundidad. */
-export function Bayas({ t = "", opacity = 1 }: Colocacion) {
+/** Capullos y bayas pequeñas para rellenar huecos sin peso. */
+export function Capullos({ t = "", opacity = 1 }: Puesta) {
   const puntos = [
-    [0, 0, 5.2],
-    [11, -6, 4.4],
-    [8, 8, 4],
-    [20, 2, 3.6],
-    [-8, 7, 3.4],
-    [17, -13, 3],
+    [0, 0, 4.6],
+    [12, -8, 4],
+    [9, 9, 3.6],
+    [22, 1, 3.2],
+    [-9, 8, 3],
+    [19, -15, 2.6],
   ] as const;
   return (
-    <g transform={t} opacity={opacity} filter="url(#acuarela-suave)">
+    <g transform={t} opacity={opacity} filter="url(#acuarela-hoja)">
       {puntos.map(([x, y, r], i) => (
         <g key={i}>
           <path
-            d={"M" + x + " " + y + "L" + (x - 12) + " " + (y + 10)}
-            stroke="#94ab8d"
-            strokeWidth="0.9"
+            d={"M" + x + " " + y + "L" + (x - 13) + " " + (y + 11)}
+            stroke="#8fa89a"
+            strokeWidth="1"
             strokeLinecap="round"
-            opacity="0.7"
+            opacity="0.75"
           />
-          <circle cx={x} cy={y} r={r} fill="url(#baya)" />
-          <circle cx={x - r * 0.3} cy={y - r * 0.35} r={r * 0.28} fill="#fbf3fa" opacity="0.55" />
+          <circle cx={x} cy={y} r={r} fill={i % 2 ? "url(#petalo-azul-claro)" : "url(#petalo-blanco)"} />
         </g>
       ))}
     </g>
   );
 }
 
-/** Paniculata: los puntitos blancos que llenan los huecos de un ramo. */
-export function Aliento({ t = "", opacity = 1 }: Colocacion) {
+/** Paniculata: los puntitos blancos que airean un ramo. */
+export function Aliento({ t = "", opacity = 1 }: Puesta) {
   const nubes = [
     [0, 0],
-    [14, -9],
-    [26, 3],
-    [10, 12],
-    [34, -8],
-    [22, -18],
-    [40, 8],
-    [-6, -11],
+    [15, -10],
+    [28, 3],
+    [11, 13],
+    [37, -9],
+    [24, -20],
+    [43, 9],
+    [-7, -12],
   ] as const;
   return (
     <g transform={t} opacity={opacity}>
       <path
-        d="M-4 14C6 6 18 -2 34 -6"
+        d="M-5 15C7 6 20 -3 37 -7"
         fill="none"
-        stroke="#a8bda2"
-        strokeWidth="0.8"
+        stroke="#9db3a7"
+        strokeWidth="0.9"
         strokeLinecap="round"
-        opacity="0.65"
+        opacity="0.7"
       />
       {nubes.map(([x, y], i) => (
-        <g key={i}>
-          <circle cx={x} cy={y} r="2.6" fill="#fffdf9" stroke="#e2dcc9" strokeWidth="0.5" />
-          <circle cx={x} cy={y} r="0.9" fill="#e6cf94" opacity="0.8" />
-        </g>
+        <circle key={i} cx={x} cy={y} r="2.9" fill="#ffffff" opacity="0.95" />
       ))}
     </g>
   );

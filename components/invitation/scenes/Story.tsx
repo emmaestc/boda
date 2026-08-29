@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Scene, Eyebrow } from "@/components/invitation/Scene";
 import { RevealText } from "@/components/ui/RevealText";
 import { Reveal } from "@/components/ui/Reveal";
-import { FloralSprig } from "@/components/art/Floral";
+import { Aliento, Eucalipto } from "@/components/art/Botanical";
 import { EASE_BREATH, inViewOnce } from "@/lib/motion";
 import { wedding } from "@/lib/config/wedding";
 
@@ -21,7 +21,10 @@ function DrawnSprig({ className, flip }: { className: string; flip?: boolean }) 
       viewport={inViewOnce}
       transition={{ duration: 1.8, ease: EASE_BREATH, delay: 0.2, opacity: { duration: 0.4 } }}
     >
-      <FloralSprig className="w-full text-gold/60" flip={flip} />
+      <svg viewBox="0 0 130 60" className="w-full overflow-visible">
+        <Eucalipto t={flip ? "translate(126 34) rotate(184) scale(0.62)" : "translate(4 34) rotate(-4) scale(0.62)"} />
+        <Aliento t={flip ? "translate(84 16) scale(0.5)" : "translate(24 16) scale(0.5)"} opacity={0.85} />
+      </svg>
     </motion.div>
   );
 }
@@ -60,7 +63,7 @@ export function Story() {
       <Reveal delay={0.9} y={14}>
         <div className="mt-12 flex flex-col items-center gap-3">
           <span className="block h-14 w-px bg-[linear-gradient(180deg,#c6a867,transparent)]" />
-          <p className="font-script text-2xl text-gold-deep">y así nos encontramos</p>
+          <p className="font-serif text-xl tracking-[0.16em] text-gold-text italic">y así nos encontramos</p>
         </div>
       </Reveal>
     </Scene>

@@ -6,7 +6,7 @@ import { Scene, Eyebrow } from "@/components/invitation/Scene";
 import { Reveal } from "@/components/ui/Reveal";
 import { Countdown } from "@/components/invitation/Countdown";
 import { ActionLink } from "@/components/ui/Button";
-import { Aliento, Eucalipto, Rosa } from "@/components/art/Botanical";
+import { Aliento, Eucalipto, RosaBlanca } from "@/components/art/Botanical";
 import { EASE_SILK, inViewOnce } from "@/lib/motion";
 import { calendarLink } from "@/lib/calendar";
 import { wedding } from "@/lib/config/wedding";
@@ -65,14 +65,14 @@ export function DateScene() {
         >
           <Eucalipto t="translate(96 46) rotate(-152) scale(0.6)" opacity={0.9} />
           <Eucalipto t="translate(104 46) rotate(-28) scale(0.6)" opacity={0.9} />
-          <Rosa t="translate(100 44) scale(0.5)" />
+          <RosaBlanca t="translate(100 44) scale(0.46)" />
           <Aliento t="translate(64 30) scale(0.55)" opacity={0.85} />
           <Aliento t="translate(120 30) scale(0.55)" opacity={0.85} />
         </svg>
 
         <div className="relative flex flex-col items-center px-7 pb-9 pt-14 sm:px-10">
           <Reveal delay={0.1} y={12}>
-            <p className="font-script text-4xl leading-none text-ink-soft">
+            <p className="font-serif text-[1.6rem] tracking-[0.3em] text-ink-soft uppercase">
               {wedding.date.weekday}
             </p>
           </Reveal>
@@ -97,13 +97,13 @@ export function DateScene() {
           </div>
 
           <Reveal delay={0.42} y={12}>
-            <p className="mt-3 font-serif text-2xl tracking-[0.42em] text-ink uppercase sm:text-[1.7rem]">
+            <p className="mt-3 font-serif text-[1.6rem] tracking-[0.42em] text-ink uppercase sm:text-[1.6rem]">
               {wedding.date.month}
             </p>
           </Reveal>
 
           <Reveal delay={0.5} y={12}>
-            <p className="mt-1.5 font-sans text-lg tracking-[0.6em] text-ink-soft">
+            <p className="mt-1.5 font-sans text-xl tracking-[0.6em] text-ink-soft">
               {wedding.date.year}
             </p>
           </Reveal>

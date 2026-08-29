@@ -87,8 +87,8 @@ function Pauta({
   );
 }
 
-/** Código de vestimenta. Va justo después de la iglesia, que es cuando la
- *  pregunta aparece sola en la cabeza de quien lee. */
+/** Código de vestimenta. Va después de la recepción: primero el dónde y el
+ *  cuándo, y ya con el plan claro, el cómo vestirse. */
 export function DressCode() {
   return (
     <Scene id="vestimenta">
@@ -116,7 +116,7 @@ export function DressCode() {
         </Reveal>
 
         <Reveal delay={0.22}>
-          <p className="mt-2 font-script text-5xl text-gilded animate-shimmer">
+          <p className="text-gilded animate-shimmer mt-3 font-serif text-3xl tracking-[0.34em] uppercase sm:text-4xl">
             {copy.level}
           </p>
         </Reveal>

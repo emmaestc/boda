@@ -70,7 +70,7 @@ function PlaceCard({
               className={cn(
                 "flex items-center justify-center gap-2 leading-relaxed",
                 // La primera línea se lee desde lejos; las demás la acompañan.
-                i === 0 ? "font-sans text-xl text-ink" : "font-sans text-lg text-ink-soft",
+                i === 0 ? "font-sans text-xl text-ink" : "font-sans text-xl text-ink-soft",
               )}
             >
               {dato.icono}
@@ -143,7 +143,7 @@ export function Ceremony() {
         </PlaceCard>
 
         <Reveal delay={0.3}>
-          <p className="mt-9 max-w-sm font-script text-2xl text-ink-soft">
+          <p className="mt-9 max-w-sm font-serif text-xl leading-relaxed font-light text-ink-soft italic">
             Nos uniremos en matrimonio ante Dios
           </p>
         </Reveal>
@@ -197,7 +197,7 @@ export function Reception() {
       </PlaceCard>
 
       <Reveal delay={0.3}>
-        <p className="mt-9 max-w-sm font-script text-2xl text-gold-deep">
+        <p className="mt-9 max-w-sm font-serif text-xl leading-relaxed font-light text-gold-text italic">
           Brindemos juntos por lo que empieza
         </p>
       </Reveal>

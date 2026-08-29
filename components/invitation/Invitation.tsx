@@ -31,7 +31,7 @@ function Greeting({ name, cupo }: { name: string; cupo: number }) {
         <Eyebrow>Con toda nuestra alegría, invitamos a</Eyebrow>
       </Reveal>
       <Reveal delay={0.15}>
-        <p className="mt-5 font-script text-4xl leading-tight text-ink text-balance sm:text-5xl">
+        <p className="mt-5 font-serif text-[2.1rem] leading-tight font-light text-ink text-balance sm:text-[2.6rem]">
           {name}
         </p>
       </Reveal>
@@ -40,7 +40,7 @@ function Greeting({ name, cupo }: { name: string; cupo: number }) {
       </Reveal>
       {cupo > 1 && (
         <Reveal delay={0.4}>
-          <p className="mt-4 font-sans text-[0.85rem] tracking-[0.3em] text-ink-faint uppercase">
+          <p className="mt-4 font-sans text-[0.88rem] tracking-[0.3em] text-ink-faint uppercase">
             {cupo} lugares reservados
           </p>
         </Reveal>
@@ -157,8 +157,8 @@ export function Invitation({ guest }: { guest: PublicGuest | null }) {
         <Names />
         <DateScene />
         <Ceremony />
-        <DressCode />
         <Reception />
+        <DressCode />
         <Gift />
         <RsvpScene guest={guest} />
         <Closing />

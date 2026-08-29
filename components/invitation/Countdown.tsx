@@ -86,7 +86,7 @@ export function Countdown() {
   }
 
   if (remaining === 0) {
-    return <p className="font-script text-5xl text-gilded animate-shimmer">Hoy es el día</p>;
+    return <p className="text-gilded animate-shimmer font-serif text-3xl tracking-[0.26em] uppercase">Hoy es el día</p>;
   }
 
   const days = Math.floor(remaining / 86400);

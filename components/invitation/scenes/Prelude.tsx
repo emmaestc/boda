@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Envelope } from "@/components/art/Envelope";
-import { FloralCorner } from "@/components/art/Floral";
+import { Anemona, Capullos, Eucalipto, Follaje, RosaBlanca } from "@/components/art/Botanical";
 import { EASE_SILK } from "@/lib/motion";
 import { wedding } from "@/lib/config/wedding";
 
@@ -64,9 +64,27 @@ export function Prelude({
           : { opacity: 1, scale: 1 }
       }
     >
-      {/* Marco botánico, apenas insinuado */}
-      <FloralCorner className="pointer-events-none absolute -left-8 -top-8 w-48 text-gold/25 sm:w-64" />
-      <FloralCorner className="pointer-events-none absolute -bottom-8 -right-8 w-48 rotate-180 text-gold/25 sm:w-64" />
+      {/* Ramos en acuarela enmarcando el sobre */}
+      <svg
+        aria-hidden
+        viewBox="0 0 200 200"
+        className="pointer-events-none absolute -left-6 -top-6 w-[42vmin] max-w-[19rem] opacity-90"
+      >
+        <Follaje t="translate(-4 142) rotate(-44) scale(0.95)" opacity={0.9} />
+        <Eucalipto t="translate(-8 60) rotate(18) scale(0.9)" opacity={0.9} />
+        <RosaBlanca t="translate(72 64) scale(0.95)" />
+        <Capullos t="translate(108 26) scale(0.85)" opacity={0.9} />
+      </svg>
+      <svg
+        aria-hidden
+        viewBox="0 0 200 200"
+        className="pointer-events-none absolute -bottom-6 -right-6 w-[42vmin] max-w-[19rem] rotate-180 opacity-90"
+      >
+        <Eucalipto t="translate(-6 128) rotate(-36) scale(1)" opacity={0.9} />
+        <Follaje t="translate(2 52) rotate(14) scale(0.85)" opacity={0.85} />
+        <Anemona t="translate(84 70) scale(0.9)" />
+        <Capullos t="translate(112 116) scale(0.8)" opacity={0.9} />
+      </svg>
 
       <motion.div
         className="flex flex-col items-center gap-8"
@@ -78,7 +96,7 @@ export function Prelude({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: EASE_SILK, delay: 0.25 }}
         >
-          <p className="font-script text-2xl text-ink-soft sm:text-3xl">
+          <p className="font-serif text-[1.6rem] leading-snug font-light text-ink-soft italic sm:text-[1.6rem]">
             {wedding.copy.envelope.eyebrow}
           </p>
           {guestName && (
@@ -105,7 +123,7 @@ export function Prelude({
           transition={{ duration: 1, ease: EASE_SILK, delay: 1 }}
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.97 }}
-          className="group relative mt-2 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-full bg-ink px-9 py-3.5 font-sans text-[0.92rem] font-medium tracking-[0.3em] text-porcelain uppercase shadow-[0_18px_44px_-24px_rgba(36,56,79,0.9)] transition-colors hover:bg-[#1b2c3f] disabled:opacity-40"
+          className="group relative mt-2 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-full bg-ink px-9 py-3.5 font-sans text-[0.95rem] font-medium tracking-[0.3em] text-porcelain uppercase shadow-[0_18px_44px_-24px_rgba(36,56,79,0.9)] transition-colors hover:bg-[#1b2c3f] disabled:opacity-40"
         >
           <span className="pointer-events-none absolute inset-0 -translate-x-full bg-[linear-gradient(100deg,transparent,rgba(233,216,176,0.5),transparent)] transition-transform duration-[900ms] group-hover:translate-x-full" />
           <span className="relative">{wedding.copy.envelope.cta}</span>

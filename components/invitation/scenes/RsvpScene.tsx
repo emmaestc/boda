@@ -8,7 +8,7 @@ import { ActionButton } from "@/components/ui/Button";
 import { RsvpDialog } from "@/components/rsvp/RsvpDialog";
 import { Divider } from "@/components/art/Icons";
 import { HandHeart } from "lucide-react";
-import { FloralWreath } from "@/components/art/Floral";
+import { Aliento, Eucalipto, Hortensia } from "@/components/art/Botanical";
 import { inViewOnce } from "@/lib/motion";
 import { wedding } from "@/lib/config/wedding";
 import type { PublicGuest } from "@/lib/guests/types";
@@ -26,7 +26,7 @@ function CurrentAnswer({ guest }: { guest: PublicGuest }) {
   return (
     <div className="mt-6 inline-flex items-center gap-2.5 rounded-full border border-gold/40 bg-white/70 px-5 py-2.5">
       <HandHeart className="h-[1.05rem] w-[1.05rem] text-gold-text" strokeWidth={1.6} />
-      <span className="font-sans text-[0.9rem] tracking-[0.16em] text-ink-soft">{text}</span>
+      <span className="font-sans text-[0.95rem] tracking-[0.16em] text-ink-soft">{text}</span>
     </div>
   );
 }
@@ -43,7 +43,17 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
   return (
     <Scene id="confirmar">
       <div className="relative flex w-full flex-col items-center">
-        <FloralWreath className="pointer-events-none absolute -top-10 w-[min(100%,28rem)] rotate-180 text-powder/60" />
+        <svg
+          aria-hidden
+          viewBox="0 0 240 90"
+          className="pointer-events-none absolute -top-8 left-1/2 w-[min(104%,26rem)] -translate-x-1/2 opacity-75"
+        >
+          <Eucalipto t="translate(10 56) rotate(-12) scale(0.7)" />
+          <Eucalipto t="translate(230 56) rotate(192) scale(0.7)" />
+          <Hortensia t="translate(120 44) scale(0.55)" />
+          <Aliento t="translate(70 26) scale(0.58)" opacity={0.85} />
+          <Aliento t="translate(164 26) scale(0.58)" opacity={0.85} />
+        </svg>
 
         <Reveal>
           <Eyebrow>Nos hará muy felices</Eyebrow>
@@ -65,7 +75,7 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
         </motion.h2>
 
         <Reveal delay={0.25}>
-          <p className="mt-4 font-sans text-[0.92rem] tracking-[0.36em] text-ink-soft uppercase">
+          <p className="mt-4 font-sans text-[0.95rem] tracking-[0.36em] text-ink-soft uppercase">
             {wedding.copy.rsvp.subtitle}
           </p>
         </Reveal>
@@ -97,7 +107,7 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
         ) : (
           <Reveal delay={0.45} className="mt-8">
             <div className="max-w-sm rounded-2xl border border-powder/70 bg-white/60 px-7 py-6 backdrop-blur-sm">
-              <p className="font-serif text-lg leading-relaxed font-light text-ink-soft italic">
+              <p className="font-serif text-xl leading-relaxed font-light text-ink-soft italic">
                 Para confirmar tu asistencia, abre el enlace personal que te enviamos.
               </p>
               <p className="mt-3 font-sans text-[0.95rem] leading-relaxed text-ink-faint">

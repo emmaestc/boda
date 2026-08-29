@@ -27,7 +27,7 @@ export function MapPanel({ place, label }: { place: Place; label: string }) {
           type="button"
           onClick={() => setShowMap((v) => !v)}
           aria-expanded={showMap}
-          className="font-sans text-[0.86rem] tracking-[0.24em] text-ink-faint uppercase underline-offset-4 transition-colors hover:text-ink hover:underline"
+          className="font-sans text-[0.88rem] tracking-[0.24em] text-ink-faint uppercase underline-offset-4 transition-colors hover:text-ink hover:underline"
         >
           {showMap ? "Ocultar mapa" : "Ver el mapa aquí"}
         </button>

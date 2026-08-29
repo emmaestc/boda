@@ -4,15 +4,25 @@ import { Scene } from "@/components/invitation/Scene";
 import { Reveal } from "@/components/ui/Reveal";
 import { Monogram } from "@/components/art/Monogram";
 import { Cross } from "lucide-react";
-import { FloralCorner } from "@/components/art/Floral";
+import { Aliento, Eucalipto, RosaBlanca } from "@/components/art/Botanical";
 import { wedding } from "@/lib/config/wedding";
 
 /** Última respiración: el monograma, la bendición y el silencio. */
 export function Closing() {
   return (
     <Scene id="cierre" tall={false} className="pb-32 pt-10">
-      <FloralCorner className="pointer-events-none absolute -left-6 bottom-0 w-40 -rotate-90 text-gold/20 sm:w-56" />
-      <FloralCorner className="pointer-events-none absolute -right-6 bottom-0 w-40 rotate-180 text-gold/20 sm:w-56" />
+      {/* Dos ramas que se cierran bajo la firma */}
+      <svg
+        aria-hidden
+        viewBox="0 0 240 90"
+        className="pointer-events-none absolute bottom-2 left-1/2 w-[min(108%,26rem)] -translate-x-1/2 opacity-70"
+      >
+        <Eucalipto t="translate(6 58) rotate(-10) scale(0.72)" />
+        <Eucalipto t="translate(234 58) rotate(190) scale(0.72)" />
+        <RosaBlanca t="translate(120 52) scale(0.42)" />
+        <Aliento t="translate(74 30) scale(0.6)" opacity={0.85} />
+        <Aliento t="translate(166 30) scale(0.6)" opacity={0.85} />
+      </svg>
 
       <Reveal>
         <Cross className="h-8 w-8 text-gold/80" strokeWidth={1.2} />

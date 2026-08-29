@@ -110,9 +110,9 @@ export const wedding = {
    * Con `src` en `null` el control desaparece y no suena nada.
    */
   music: {
-    src: "/music/eres-mi-sueno.mp3",
-    title: "Eres mi sueño",
-    artist: "Fonseca",
+    src: "/music/perfect-violin.mp3",
+    title: "Perfect",
+    artist: "Ed Sheeran · versión para violín",
     /** Volumen final del fundido de entrada, de 0 a 1. */
     volume: 0.3,
   },

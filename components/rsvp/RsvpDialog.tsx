@@ -87,7 +87,7 @@ function StepShell({
       transition={{ duration: 0.6, ease: EASE_SILK }}
     >
       <div className="flex flex-col items-center gap-2">
-        <h3 className="font-serif text-2xl leading-snug font-light text-ink text-balance sm:text-3xl">
+        <h3 className="font-serif text-[1.6rem] leading-snug font-light text-ink text-balance sm:text-3xl">
           {title}
         </h3>
         {hint && <p className="max-w-xs font-sans text-[0.95rem] text-ink-faint">{hint}</p>}
@@ -250,11 +250,11 @@ export function RsvpDialog({
               <div className="relative flex flex-col items-center gap-5 py-6 text-center">
                 <Burst />
                 <Monogram size={72} />
-                <h3 className="font-script text-4xl text-gold-deep">
+                <h3 className="font-script text-[2.6rem] leading-tight text-gold-deep">
                   {answer.attending ? "¡Qué felicidad!" : "Te vamos a extrañar"}
                 </h3>
                 <Divider className="w-36 text-gold" />
-                <p className="max-w-sm font-serif text-lg leading-relaxed font-light text-ink-soft italic">
+                <p className="max-w-sm font-serif text-xl leading-relaxed font-light text-ink-soft italic">
                   {answer.attending
                     ? "Gracias por confirmar, " +
                       guest.nombre.split(" ")[0] +
@@ -271,7 +271,7 @@ export function RsvpDialog({
                   <p className="font-sans text-[0.88rem] tracking-[0.38em] text-ink-faint uppercase">
                     Confirmación
                   </p>
-                  <p className="font-script text-2xl text-ink">{guest.nombre}</p>
+                  <p className="font-serif text-[1.6rem] font-light text-ink">{guest.nombre}</p>
                 </div>
 
                 <div className="relative flex min-h-[19rem] w-full items-start">
@@ -287,7 +287,7 @@ export function RsvpDialog({
                             }}
                           >
                             <span className="flex items-center gap-3">
-                              <span className="text-lg">❤️</span>
+                              <span className="text-xl">❤️</span>
                               <span className="font-medium tracking-wide">Sí, allí estaré</span>
                             </span>
                           </Choice>
@@ -299,7 +299,7 @@ export function RsvpDialog({
                             }}
                           >
                             <span className="flex items-center gap-3">
-                              <span className="text-lg">😢</span>
+                              <span className="text-xl">😢</span>
                               <span className="font-medium tracking-wide">
                                 No podré acompañarlos
                               </span>
@@ -474,7 +474,7 @@ export function RsvpDialog({
                   <button
                     type="button"
                     onClick={step === 0 ? onClose : back}
-                    className="font-sans text-[0.86rem] tracking-[0.26em] text-ink-faint uppercase transition-colors hover:text-ink"
+                    className="font-sans text-[0.88rem] tracking-[0.26em] text-ink-faint uppercase transition-colors hover:text-ink"
                   >
                     {step === 0 ? "Cerrar" : "Atrás"}
                   </button>

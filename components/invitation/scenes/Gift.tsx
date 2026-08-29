@@ -92,7 +92,7 @@ function GiftEnvelope() {
             transition={{ duration: 0.8, ease: EASE_SILK, delay: reduced ? 0 : 0.35 }}
           >
             <Heart className="h-5 w-5 text-gold-deep" strokeWidth={1.5} />
-            <span className="font-script text-lg text-ink-soft">Gracias</span>
+            <span className="font-serif text-xl tracking-[0.14em] text-ink-soft italic">Gracias</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -143,7 +143,7 @@ export function Gift() {
           text={wedding.copy.gift.intro}
           delay={0.2}
           stagger={0.035}
-          className="mt-8 max-w-lg font-serif text-lg leading-relaxed font-light text-ink-soft italic text-balance sm:text-xl"
+          className="mt-8 max-w-lg font-serif text-xl leading-relaxed font-light text-ink-soft italic text-balance sm:text-xl"
         />
 
         <Reveal delay={0.4} className="mt-10">
@@ -151,7 +151,7 @@ export function Gift() {
         </Reveal>
 
         <Reveal delay={0.5}>
-          <h3 className="mt-6 font-script text-4xl text-gilded animate-shimmer sm:text-5xl">
+          <h3 className="text-gilded animate-shimmer mt-6 font-serif text-3xl tracking-[0.24em] uppercase sm:text-[2.3rem]">
             {wedding.copy.gift.title}
           </h3>
         </Reveal>

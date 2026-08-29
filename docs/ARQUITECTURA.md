@@ -30,8 +30,8 @@ distintos. Está en `components/invitation/Atmosphere.tsx`.
 | Los nombres | `scenes/Names.tsx` | Anillos que se entrelazan; el "&" nace de la unión |
 | La fecha | `scenes/DateScene.tsx` | 06 · Noviembre · 2026 y cuenta regresiva |
 | Ceremonia | `scenes/Venues.tsx` | Luz de vitral, cruz discreta, paloma |
-| Vestimenta | `scenes/DressCode.tsx` | El código formal y la regla del blanco |
 | Recepción | `scenes/Venues.tsx` | Giro a dorado, copas, luces |
+| Vestimenta | `scenes/DressCode.tsx` | El código formal y la regla del blanco |
 | Lluvia de sobres | `scenes/Gift.tsx` | Sobres cayendo; uno se abre al tocarlo |
 | Confirmación | `scenes/RsvpScene.tsx` | Entrada al RSVP |
 | Cierre | `scenes/Closing.tsx` | Monograma y bendición |
@@ -136,7 +136,25 @@ secreta. Consecuencias:
 
 ---
 
-## 4. Accesibilidad
+## 4. Tipografía
+
+Tres familias y nada más: **Cormorant Garamond** para lo que se lee despacio,
+**Jost** para lo práctico y **Great Vibes** reservada a cuatro momentos —el
+"&" de los nombres, la firma del cierre, el "¡Te esperamos!" y el monograma—.
+La cursiva llegó a estar en trece sitios; es preciosa y es justo la que peor
+lee una persona mayor, así que ahora donde antes había caligrafía hay serif en
+cursiva de imprenta o versalitas espaciadas, que sostienen la elegancia sin
+pedir esfuerzo.
+
+La escala se consolidó de diecisiete cuerpos distintos a diez, fundiendo los
+que se diferenciaban en medio píxel: la variedad tiene que venir de la familia
+y del interletraje, no de tener quince tamaños que nadie distingue. **Nada baja
+de 15 px**, la base del documento es de 17 y los datos prácticos —direcciones y
+horas— van a 21.
+
+---
+
+## 5. Accesibilidad
 
 - `prefers-reduced-motion` produce una **versión estática completa**, no una
   versión mutilada: el mismo contenido, sin movimiento.
@@ -151,7 +169,7 @@ secreta. Consecuencias:
 
 ---
 
-## 5. Detalles que puede que no se noten (y por eso importan)
+## 6. Detalles que puede que no se noten (y por eso importan)
 
 - **El sobre viene con el nombre del invitado escrito.** Es lo primero que se
   ve, y hace que la invitación se sienta dirigida a esa persona.
@@ -175,7 +193,7 @@ secreta. Consecuencias:
 
 ---
 
-## 6. Las flores
+## 7. Las flores
 
 El marco floral (`components/invitation/FloralFrame.tsx`) va **fijo al
 viewport**, no dentro del documento: enmarca la lectura como el paspartú de un
@@ -193,15 +211,32 @@ en 1280 px: **cero solapes**.
 - Los ramos asoman un poco fuera del borde, de modo que el peso visual queda
   en la esquina y la columna de lectura queda libre.
 
-Sobre el realismo: no hay ni una fotografía. Las flores se pintan con
-`feTurbulence` + `feDisplacementMap`, que rompe los bordes de forma irregular
-—la diferencia entre un trazo pintado y uno vectorial—, más un degradado
-radial por pétalo que imita el pigmento acumulándose donde el agua se seca.
-Están en `components/art/Botanical.tsx`.
+Sobre el realismo: no hay ni una fotografía, y sin embargo la clave no está
+en el número de pétalos sino en cuatro cosas, todas en
+`components/art/Botanical.tsx`:
+
+1. **Sin contornos.** Una flor pintada no tiene línea alrededor, tiene masa
+   de color. La primera versión dibujaba cada pétalo con su borde, y eso es
+   exactamente lo que la delataba como vectorial.
+2. **Estructura de valor.** Debajo de cada flor va una sombra difuminada que
+   la asienta y dentro un degradado que va de claro en la punta a saturado en
+   la base. Sin eso, una flor parece una pegatina por muchos pétalos que
+   tenga.
+3. **Bordes rotos y blandos.** `feTurbulence` + `feDisplacementMap` deforma el
+   contorno de forma irregular y un desenfoque posterior lo ablanda, igual que
+   el agua al correrse por el papel.
+4. **Paleta corta.** Blanco con sombra azulada, crema del propio fondo y
+   azules; el follaje también tira a azulado. Seis especies: rosa blanca, rosa
+   crema, anémona, hortensia, delfinio y eucalipto.
+
+La composición está pensada para el teléfono: a 130 píxeles una flor
+protagonista clara se lee, y diez flores pequeñas se convierten en una mancha.
+Por eso cada ramo tiene una principal y el resto acompaña, y en pantallas
+estrechas se montan menos piezas.
 
 ---
 
-## 7. La música
+## 8. La música
 
 Arranca en el mismo manejador del toque que abre el sobre, no después. Es
 deliberado: Safari en iOS exige que `play()` se llame dentro del propio gesto
@@ -217,7 +252,7 @@ llegar a tiempo.
 
 ---
 
-## 8. Cosas que quedaron preparadas y no encendidas
+## 9. Cosas que quedaron preparadas y no encendidas
 
 - **Punto exacto en los mapas.** Ahora se busca por dirección completa, que es
   correcto y no inventa coordenadas. Cuando se confirme el sitio exacto, se pega

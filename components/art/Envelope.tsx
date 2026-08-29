@@ -52,7 +52,7 @@ export function Envelope({
         transition={{ duration: reduced ? 0.2 : 1.15, ease: EASE, delay: opened && !reduced ? 0.62 : 0 }}
       >
         <Monogram size={56} />
-        <p className="font-serif text-[0.86rem] tracking-[0.42em] text-ink-soft uppercase">
+        <p className="font-serif text-[0.88rem] tracking-[0.42em] text-ink-soft uppercase">
           {wedding.date.day} · {wedding.date.month} · {wedding.date.year}
         </p>
       </motion.div>
@@ -116,7 +116,7 @@ export function Envelope({
           {/* En un lacre de 56 px dos iniciales cursivas quedan ilegibles;
               el ampersand solo se lee perfecto y es el motivo de toda la
               invitación. */}
-          <span className="absolute inset-0 grid place-items-center pb-[3px] font-script text-[1.9rem] leading-none text-white/90">
+          <span className="absolute inset-0 grid place-items-center pb-[3px] font-script text-3xl leading-none text-white/90">
             &amp;
           </span>
           {!reduced && !opened && (
