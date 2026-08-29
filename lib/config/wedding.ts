@@ -83,8 +83,7 @@ export const wedding = {
       level: "Formal",
       /** La regla que de verdad hay que comunicar, dicha con cariño. */
       note: "Se reserva el color blanco para la novia.",
-      hint: "Vestido largo o midi para ellas, traje oscuro para ellos.",
-      warm: "Y unos zapatos con los que se pueda bailar hasta tarde.",
+      warm: "Unos zapatos con los que te sientas bien para bailar.",
     },
     gift: {
       intro:

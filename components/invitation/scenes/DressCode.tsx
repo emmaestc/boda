@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shirt, Sparkles, Footprints } from "lucide-react";
+import { Sparkles, Footprints } from "lucide-react";
 import { Scene, Eyebrow } from "@/components/invitation/Scene";
 import { Reveal } from "@/components/ui/Reveal";
 import { Divider } from "@/components/art/Icons";
+import { Novios } from "@/components/art/Novios";
 import { Eucalipto, Aliento } from "@/components/art/Botanical";
 import { EASE_SILK, inViewOnce } from "@/lib/motion";
 import { wedding } from "@/lib/config/wedding";
@@ -12,47 +13,42 @@ import { wedding } from "@/lib/config/wedding";
 const copy = wedding.copy.dressCode;
 
 /**
- * La regla del blanco, dibujada.
+ * Los novios, dentro de un medallón.
  *
- * Un círculo de tela blanca tachado se entiende antes que cualquier frase, y
- * deja el texto para explicar el porqué en tono amable. El aro que lo rodea se
- * traza al entrar en pantalla, como si alguien lo marcara a mano.
+ * La silueta explica de un vistazo de qué va la sección, y el aro dorado que
+ * se traza al entrar en pantalla la enmarca sin robarle protagonismo al texto,
+ * que es donde está la regla de verdad.
  */
-function SoloParaLaNovia() {
+function Medallon() {
   return (
-    <div className="relative grid h-28 w-28 shrink-0 place-items-center">
+    <div className="relative grid h-32 w-32 shrink-0 place-items-center">
       <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" fill="none">
+        <circle cx="50" cy="50" r="47" fill="#ffffff" opacity="0.55" />
         <motion.circle
           cx="50"
           cy="50"
-          r="43"
+          r="47"
           stroke="#c6a867"
-          strokeWidth="1.4"
+          strokeWidth="1.3"
           strokeLinecap="round"
-          strokeDasharray="4 6"
-          initial={{ pathLength: 0, rotate: -90 }}
+          initial={{ pathLength: 0 }}
           whileInView={{ pathLength: 1 }}
           viewport={inViewOnce}
           transition={{ duration: 1.8, ease: EASE_SILK, delay: 0.3 }}
-          style={{ transformOrigin: "50% 50%" }}
+          style={{ transformOrigin: "50% 50%", rotate: -90 }}
         />
+        <circle cx="50" cy="50" r="43" stroke="#c6a867" strokeWidth="0.5" opacity="0.55" />
       </svg>
 
-      {/* La muestra de tela blanca */}
-      <div className="relative grid h-[4.6rem] w-[4.6rem] place-items-center rounded-full border border-gold/35 bg-[radial-gradient(circle_at_34%_30%,#ffffff,#f3f1ea)] shadow-[inset_0_-6px_14px_-8px_rgba(36,56,79,0.35)]">
-        <span className="font-serif text-[0.95rem] tracking-[0.2em] text-ink-faint uppercase">
-          blanco
-        </span>
-        {/* La barra que lo reserva */}
-        <motion.span
-          className="absolute h-[1.6px] w-[5.4rem] origin-center rounded-full bg-gold-deep"
-          style={{ rotate: -32 }}
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={inViewOnce}
-          transition={{ duration: 0.8, ease: EASE_SILK, delay: 1.4 }}
-        />
-      </div>
+      <motion.div
+        className="relative"
+        initial={{ opacity: 0, scale: 0.86 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={inViewOnce}
+        transition={{ duration: 1, ease: EASE_SILK, delay: 0.5 }}
+      >
+        <Novios className="h-[5.4rem] w-[5.4rem]" />
+      </motion.div>
     </div>
   );
 }
@@ -92,12 +88,12 @@ function Pauta({
 export function DressCode() {
   return (
     <Scene id="vestimenta">
-      <div className="relative flex w-full flex-col items-center">
+      <div className="relative isolate flex w-full flex-col items-center">
         {/* Botánica propia de la escena, muy tenue y fuera del texto */}
         <svg
           aria-hidden
           viewBox="0 0 200 120"
-          className="pointer-events-none absolute -top-6 left-1/2 w-[min(110%,30rem)] -translate-x-1/2 opacity-45"
+          className="pointer-events-none absolute -top-6 left-1/2 -z-10 w-[min(110%,30rem)] -translate-x-1/2 opacity-45"
         >
           <Eucalipto t="translate(4 74) rotate(-14) scale(0.72)" />
           <Eucalipto t="translate(196 74) rotate(194) scale(0.72)" />
@@ -133,19 +129,13 @@ export function DressCode() {
           viewport={inViewOnce}
           transition={{ duration: 1.2, ease: EASE_SILK }}
         >
-          <SoloParaLaNovia />
+          <Medallon />
           <p className="font-serif text-xl leading-relaxed font-light text-ink text-balance italic sm:text-left">
             {copy.note}
           </p>
         </motion.div>
 
         <ul className="mt-9 flex w-full max-w-md flex-col gap-5">
-          <Pauta
-            icono={<Shirt className="h-5 w-5" strokeWidth={1.5} />}
-            titulo="Qué llevar"
-            texto={copy.hint}
-            delay={0.1}
-          />
           <Pauta
             icono={<Footprints className="h-5 w-5" strokeWidth={1.5} />}
             titulo="Un consejo"

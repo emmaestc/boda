@@ -42,11 +42,11 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
 
   return (
     <Scene id="confirmar">
-      <div className="relative flex w-full flex-col items-center">
+      <div className="relative isolate flex w-full flex-col items-center">
         <svg
           aria-hidden
           viewBox="0 0 240 90"
-          className="pointer-events-none absolute -top-8 left-1/2 w-[min(104%,26rem)] -translate-x-1/2 opacity-75"
+          className="pointer-events-none absolute -top-8 left-1/2 -z-10 w-[min(104%,26rem)] -translate-x-1/2 opacity-75"
         >
           <Eucalipto t="translate(10 56) rotate(-12) scale(0.7)" />
           <Eucalipto t="translate(230 56) rotate(192) scale(0.7)" />
@@ -56,7 +56,7 @@ export function RsvpScene({ guest }: { guest: PublicGuest | null }) {
         </svg>
 
         <Reveal>
-          <Eyebrow>Nos hará muy felices</Eyebrow>
+          <Eyebrow>Nos hará muy felices tu presencia</Eyebrow>
         </Reveal>
 
         <motion.h2

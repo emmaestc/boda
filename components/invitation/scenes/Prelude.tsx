@@ -68,7 +68,7 @@ export function Prelude({
       <svg
         aria-hidden
         viewBox="0 0 200 200"
-        className="pointer-events-none absolute -left-6 -top-6 w-[42vmin] max-w-[19rem] opacity-90"
+        className="pointer-events-none absolute -left-6 -top-6 -z-10 w-[42vmin] max-w-[19rem] opacity-90"
       >
         <Follaje t="translate(-4 142) rotate(-44) scale(0.95)" opacity={0.9} />
         <Eucalipto t="translate(-8 60) rotate(18) scale(0.9)" opacity={0.9} />
@@ -78,7 +78,7 @@ export function Prelude({
       <svg
         aria-hidden
         viewBox="0 0 200 200"
-        className="pointer-events-none absolute -bottom-6 -right-6 w-[42vmin] max-w-[19rem] rotate-180 opacity-90"
+        className="pointer-events-none absolute -bottom-6 -right-6 -z-10 w-[42vmin] max-w-[19rem] rotate-180 opacity-90"
       >
         <Eucalipto t="translate(-6 128) rotate(-36) scale(1)" opacity={0.9} />
         <Follaje t="translate(2 52) rotate(14) scale(0.85)" opacity={0.85} />

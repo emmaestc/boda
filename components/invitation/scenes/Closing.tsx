@@ -10,12 +10,12 @@ import { wedding } from "@/lib/config/wedding";
 /** Última respiración: el monograma, la bendición y el silencio. */
 export function Closing() {
   return (
-    <Scene id="cierre" tall={false} className="pb-32 pt-10">
+    <Scene id="cierre" tall={false} className="isolate pb-32 pt-10">
       {/* Dos ramas que se cierran bajo la firma */}
       <svg
         aria-hidden
         viewBox="0 0 240 90"
-        className="pointer-events-none absolute bottom-2 left-1/2 w-[min(108%,26rem)] -translate-x-1/2 opacity-70"
+        className="pointer-events-none absolute bottom-2 left-1/2 -z-10 w-[min(108%,26rem)] -translate-x-1/2 opacity-70"
       >
         <Eucalipto t="translate(6 58) rotate(-10) scale(0.72)" />
         <Eucalipto t="translate(234 58) rotate(190) scale(0.72)" />

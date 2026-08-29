@@ -47,7 +47,7 @@ export function DateScene() {
 
       {/* ---------------- La placa ---------------- */}
       <motion.div
-        className="relative mt-8 w-[min(100%,25rem)]"
+        className="relative isolate mt-8 w-[min(100%,25rem)]"
         initial={{ opacity: 0, y: 34, scale: 0.96 }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={inViewOnce}
@@ -61,7 +61,7 @@ export function DateScene() {
         <svg
           aria-hidden
           viewBox="0 0 200 70"
-          className="pointer-events-none absolute -top-9 left-1/2 w-44 -translate-x-1/2"
+          className="pointer-events-none absolute -top-9 left-1/2 -z-10 w-44 -translate-x-1/2"
         >
           <Eucalipto t="translate(96 46) rotate(-152) scale(0.6)" opacity={0.9} />
           <Eucalipto t="translate(104 46) rotate(-28) scale(0.6)" opacity={0.9} />

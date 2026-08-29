@@ -95,7 +95,7 @@ export function Ceremony() {
       <div ref={ref} className="flex w-full flex-col items-center">
         <PlaceCard
           accent="cool"
-          eyebrow="Ceremonia religiosa"
+          eyebrow="Ceremonia"
           title={wedding.ceremony.place}
           datos={[
             { texto: wedding.ceremony.neighborhood },
