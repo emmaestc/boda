@@ -21,8 +21,17 @@ export function Scene({
     <section
       id={id}
       className={cn(
-        "relative mx-auto flex w-full max-w-2xl flex-col items-center justify-center px-6 py-24 text-center sm:py-32",
-        tall && "min-h-[92svh]",
+        /*
+         * El relleno vertical baja de 96 a 64 px: entre dos escenas se sumaban
+         * 192 px de vacío, que en un teléfono es una pantalla entera de nada.
+         */
+        "relative mx-auto flex w-full max-w-2xl flex-col items-center justify-center px-6 py-16 text-center sm:py-24",
+        /*
+         * Y la altura mínima baja de 92 a 68 de la pantalla. Servía para dar
+         * a cada escena su propio espacio, pero en las que tienen poco texto
+         * forzaba 260 px de hueco que no aportaban nada.
+         */
+        tall && "min-h-[68svh]",
         className,
       )}
     >

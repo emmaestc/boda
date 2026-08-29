@@ -5,7 +5,7 @@ import { Sparkles, Footprints } from "lucide-react";
 import { Scene, Eyebrow } from "@/components/invitation/Scene";
 import { Reveal } from "@/components/ui/Reveal";
 import { Divider } from "@/components/art/Icons";
-import { Novios } from "@/components/art/Novios";
+import Image from "next/image";
 import { Eucalipto, Aliento } from "@/components/art/Botanical";
 import { EASE_SILK, inViewOnce } from "@/lib/motion";
 import { wedding } from "@/lib/config/wedding";
@@ -15,15 +15,17 @@ const copy = wedding.copy.dressCode;
 /**
  * Los novios, dentro de un medallón.
  *
- * La silueta explica de un vistazo de qué va la sección, y el aro dorado que
- * se traza al entrar en pantalla la enmarca sin robarle protagonismo al texto,
- * que es donde está la regla de verdad.
+ * La silueta es una imagen con fondo transparente, no un dibujo vectorial:
+ * dos figuras abrazadas tienen demasiada anatomía para resolverlas a mano y
+ * el resultado se notaba. Va por `next/image`, que la sirve en WebP al
+ * tamaño real de pantalla —unos pocos kilobytes en lugar de los 600 KB del
+ * original.
  */
 function Medallon() {
   return (
-    <div className="relative grid h-32 w-32 shrink-0 place-items-center">
+    <div className="relative grid h-36 w-36 shrink-0 place-items-center">
       <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" fill="none">
-        <circle cx="50" cy="50" r="47" fill="#ffffff" opacity="0.55" />
+        <circle cx="50" cy="50" r="47" fill="#ffffff" opacity="0.6" />
         <motion.circle
           cx="50"
           cy="50"
@@ -47,7 +49,18 @@ function Medallon() {
         viewport={inViewOnce}
         transition={{ duration: 1, ease: EASE_SILK, delay: 0.5 }}
       >
-        <Novios className="h-[6rem] w-[6rem]" />
+        {/*
+          Se le pasa el tamaño de uso (el doble del real, para pantallas de
+          alta densidad), no el intrínseco: con el intrínseco Next generaba
+          candidatos de hasta 3840 px para un medallón de 80.
+        */}
+        <Image
+          src="/images/novios-silueta.png"
+          alt=""
+          width={240}
+          height={285}
+          className="h-[6.6rem] w-auto"
+        />
       </motion.div>
     </div>
   );

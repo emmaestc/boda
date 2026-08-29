@@ -10,7 +10,7 @@ import { wedding } from "@/lib/config/wedding";
 /** Última respiración: el monograma, la bendición y el silencio. */
 export function Closing() {
   return (
-    <Scene id="cierre" tall={false} className="isolate pb-32 pt-10">
+    <Scene id="cierre" tall={false} className="isolate pb-20 pt-6">
       {/* Dos ramas que se cierran bajo la firma */}
       <svg
         aria-hidden
