@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Atmosphere } from "./Atmosphere";
 import { Ambient, PetalBurst } from "./Ambient";
+import { FloralFrame } from "./FloralFrame";
+import { BotanicalDefs } from "@/components/art/Botanical";
 import { LightThread } from "./LightThread";
 import { MusicToggle, ScrollHint, ScrollProgress } from "./Chrome";
 import { Scene, Eyebrow } from "./Scene";
@@ -12,6 +14,7 @@ import { Story } from "./scenes/Story";
 import { Names } from "./scenes/Names";
 import { DateScene } from "./scenes/DateScene";
 import { Ceremony, Reception } from "./scenes/Venues";
+import { DressCode } from "./scenes/DressCode";
 import { Gift } from "./scenes/Gift";
 import { RsvpScene } from "./scenes/RsvpScene";
 import { Closing } from "./scenes/Closing";
@@ -127,7 +130,9 @@ export function Invitation({ guest }: { guest: PublicGuest | null }) {
 
   return (
     <>
+      <BotanicalDefs />
       <Atmosphere />
+      <FloralFrame />
       <Ambient />
       {opened && (
         <>
@@ -152,6 +157,7 @@ export function Invitation({ guest }: { guest: PublicGuest | null }) {
         <Names />
         <DateScene />
         <Ceremony />
+        <DressCode />
         <Reception />
         <Gift />
         <RsvpScene guest={guest} />

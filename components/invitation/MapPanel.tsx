@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ActionLink } from "@/components/ui/Button";
-import { Pin } from "@/components/art/Icons";
+import { MapPin } from "lucide-react";
 import { mapsEmbed, mapsLink } from "@/lib/maps";
 
 type Place = { readonly mapsQuery: string; readonly mapsUrl: string | null };
@@ -20,7 +20,7 @@ export function MapPanel({ place, label }: { place: Place; label: string }) {
     <div className="flex w-full flex-col items-center gap-4">
       <div className="flex flex-wrap items-center justify-center gap-3">
         <ActionLink href={mapsLink(place)} variant="outline">
-          <Pin className="h-4 w-4 text-gold-deep" />
+          <MapPin className="h-[1.05rem] w-[1.05rem] text-gold-text" strokeWidth={1.7} />
           Ver en Google Maps
         </ActionLink>
         <button

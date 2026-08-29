@@ -41,7 +41,7 @@ export function LightThread({ target }: { target: RefObject<HTMLElement | null> 
 
   const dobleHebra = useTransform(scrollYProgress, [0, 0.26], [0, 1]);
   const hebraUnica = useTransform(scrollYProgress, [0.24, 0.97], [0, 1]);
-  const fade = useTransform(scrollYProgress, [0, 0.04], [0, 1]);
+  const fade = useTransform(scrollYProgress, [0, 0.04], [0, 0.6]);
 
   // La cabeza luminosa: un tramo corto y brillante que viaja por el trazo
   // según se dibuja, para que se vea que el hilo está recorriendo un camino.
@@ -72,41 +72,64 @@ export function LightThread({ target }: { target: RefObject<HTMLElement | null> 
           </linearGradient>
         </defs>
 
+        {/*
+          `vector-effect` es un atributo de presentación que NO se hereda: si
+          se pone en el grupo, los trazos se escalan con el viewBox y —al
+          estirarse este lienzo casi cuatro veces a lo ancho— la hebra acaba
+          convertida en una barra que tapa el contenido. Va en cada `path`.
+        */}
         <g
           stroke="url(#thread-light)"
-          strokeWidth="2.2"
           strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-          style={{ filter: "drop-shadow(0 0 6px rgba(198,168,103,0.45))" }}
+          style={{ filter: "drop-shadow(0 0 5px rgba(198,168,103,0.4))" }}
         >
-          <motion.path d={HEBRA_A} style={{ pathLength: dobleHebra }} />
-          <motion.path d={HEBRA_B} style={{ pathLength: dobleHebra }} />
-          <motion.path d={HEBRA_UNICA} style={{ pathLength: hebraUnica }} />
+          <motion.path
+            d={HEBRA_A}
+            strokeWidth="1.5"
+            vectorEffect="non-scaling-stroke"
+            style={{ pathLength: dobleHebra }}
+          />
+          <motion.path
+            d={HEBRA_B}
+            strokeWidth="1.5"
+            vectorEffect="non-scaling-stroke"
+            style={{ pathLength: dobleHebra }}
+          />
+          <motion.path
+            d={HEBRA_UNICA}
+            strokeWidth="1.5"
+            vectorEffect="non-scaling-stroke"
+            style={{ pathLength: hebraUnica }}
+          />
         </g>
 
         {/* Cabezas luminosas */}
         <g
-          stroke="#fffdf4"
-          strokeWidth="3.4"
+          stroke="#fff8e2"
           strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-          style={{ filter: "drop-shadow(0 0 7px rgba(255,246,214,0.95))" }}
+          style={{ filter: "drop-shadow(0 0 6px rgba(255,246,214,0.85))" }}
         >
           <motion.path
             d={HEBRA_A}
             pathLength={1}
+            strokeWidth="2.4"
+            vectorEffect="non-scaling-stroke"
             strokeDasharray="0.028 1"
             style={{ strokeDashoffset: cabezaDoble, opacity: brilloDoble }}
           />
           <motion.path
             d={HEBRA_B}
             pathLength={1}
+            strokeWidth="2.4"
+            vectorEffect="non-scaling-stroke"
             strokeDasharray="0.028 1"
             style={{ strokeDashoffset: cabezaDoble, opacity: brilloDoble }}
           />
           <motion.path
             d={HEBRA_UNICA}
             pathLength={1}
+            strokeWidth="2.4"
+            vectorEffect="non-scaling-stroke"
             strokeDasharray="0.02 1"
             style={{ strokeDashoffset: cabezaUnica, opacity: brilloUnico }}
           />

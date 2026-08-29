@@ -6,7 +6,7 @@ import { motion, useInView } from "framer-motion";
 import { Scene, Eyebrow } from "@/components/invitation/Scene";
 import { Reveal } from "@/components/ui/Reveal";
 import { MapPanel } from "@/components/invitation/MapPanel";
-import { Church, Cross, Dove, Glasses } from "@/components/art/Icons";
+import { Church, Cross, Bird, Martini, MapPin, Clock } from "lucide-react";
 import { EASE_SILK, inViewOnce } from "@/lib/motion";
 import { wedding } from "@/lib/config/wedding";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,7 @@ function PlaceCard({
   icon,
   eyebrow,
   title,
-  lines,
+  datos,
   accent,
   children,
   ambience,
@@ -29,7 +29,7 @@ function PlaceCard({
   icon: ReactNode;
   eyebrow: string;
   title: string;
-  lines: string[];
+  datos: Array<{ icono?: ReactNode; texto: string }>;
   accent: "cool" | "warm";
   children: ReactNode;
   ambience?: ReactNode;
@@ -63,19 +63,18 @@ function PlaceCard({
           {title}
         </h3>
 
-        <div className="flex flex-col items-center gap-1.5">
-          {lines.map((line, i) => (
+        <div className="flex flex-col items-center gap-2">
+          {datos.map((dato, i) => (
             <p
-              key={line}
+              key={dato.texto}
               className={cn(
-                "leading-relaxed",
-                // La primera línea de datos y la hora se leen desde lejos.
-                i === 0
-                  ? "font-sans text-xl text-ink"
-                  : "font-sans text-lg text-ink-soft",
+                "flex items-center justify-center gap-2 leading-relaxed",
+                // La primera línea se lee desde lejos; las demás la acompañan.
+                i === 0 ? "font-sans text-xl text-ink" : "font-sans text-lg text-ink-soft",
               )}
             >
-              {line}
+              {dato.icono}
+              {dato.texto}
             </p>
           ))}
         </div>
@@ -98,15 +97,21 @@ export function Ceremony() {
           accent="cool"
           eyebrow="Ceremonia religiosa"
           title={wedding.ceremony.place}
-          lines={[
-            wedding.ceremony.neighborhood,
-            wedding.ceremony.address,
-            wedding.ceremony.time,
+          datos={[
+            { texto: wedding.ceremony.neighborhood },
+            {
+              icono: <MapPin className="h-[1.05rem] w-[1.05rem] shrink-0 text-gold-text" strokeWidth={1.7} />,
+              texto: wedding.ceremony.address,
+            },
+            {
+              icono: <Clock className="h-[1.05rem] w-[1.05rem] shrink-0 text-gold-text" strokeWidth={1.7} />,
+              texto: wedding.ceremony.time,
+            },
           ]}
           icon={
             <div className="relative">
-              <Church className="w-20 text-ink-soft" />
-              <Cross className="absolute -right-6 -top-3 w-5 text-gold" />
+              <Church className="h-20 w-20 text-ink-soft" strokeWidth={0.9} />
+              <Cross className="absolute -right-5 -top-2 h-6 w-6 text-gold" strokeWidth={1.4} />
             </div>
           }
           ambience={
@@ -126,7 +131,10 @@ export function Ceremony() {
                 animate={inView ? { x: "420%", y: [-6, -22, -4], opacity: [0, 0.9, 0.9, 0] } : {}}
                 transition={{ duration: 9, ease: "easeInOut", delay: 1.6 }}
               >
-                <Dove className="w-full drop-shadow-[0_2px_10px_rgba(157,188,218,0.7)]" />
+                <Bird
+                  className="h-full w-full text-white drop-shadow-[0_2px_10px_rgba(157,188,218,0.9)]"
+                  strokeWidth={1.1}
+                />
               </motion.div>
             </>
           }
@@ -152,8 +160,15 @@ export function Reception() {
         accent="warm"
         eyebrow="Y después, a celebrar"
         title={wedding.reception.title}
-        lines={[wedding.reception.address, wedding.reception.place, wedding.city]}
-        icon={<Glasses className="w-20 text-gold-deep" />}
+        datos={[
+          { texto: wedding.reception.place },
+          {
+            icono: <MapPin className="h-[1.05rem] w-[1.05rem] shrink-0 text-gold-text" strokeWidth={1.7} />,
+            texto: wedding.reception.address,
+          },
+          { texto: wedding.city },
+        ]}
+        icon={<Martini className="h-20 w-20 text-gold-deep" strokeWidth={0.9} />}
         ambience={
           <div aria-hidden className="pointer-events-none absolute inset-0">
             {[

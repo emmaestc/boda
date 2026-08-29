@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ActionButton } from "@/components/ui/Button";
-import { Divider, Heart } from "@/components/art/Icons";
+import { Divider } from "@/components/art/Icons";
+import { Heart } from "lucide-react";
 import { Monogram } from "@/components/art/Monogram";
 import { EASE_SILK } from "@/lib/motion";
 import { DIET, DIET_LABEL, type Diet, type PublicGuest } from "@/lib/guests/types";
@@ -57,7 +58,7 @@ function Burst() {
             }}
             transition={{ duration: 1.8 + (i % 3) * 0.35, ease: "easeOut", delay: i * 0.035 }}
           >
-            <Heart className="h-4 w-4" />
+            <Heart className="h-4 w-4" strokeWidth={1.6} />
           </motion.span>
         );
       })}

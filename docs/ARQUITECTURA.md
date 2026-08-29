@@ -30,6 +30,7 @@ distintos. Está en `components/invitation/Atmosphere.tsx`.
 | Los nombres | `scenes/Names.tsx` | Anillos que se entrelazan; el "&" nace de la unión |
 | La fecha | `scenes/DateScene.tsx` | 06 · Noviembre · 2026 y cuenta regresiva |
 | Ceremonia | `scenes/Venues.tsx` | Luz de vitral, cruz discreta, paloma |
+| Vestimenta | `scenes/DressCode.tsx` | El código formal y la regla del blanco |
 | Recepción | `scenes/Venues.tsx` | Giro a dorado, copas, luces |
 | Lluvia de sobres | `scenes/Gift.tsx` | Sobres cayendo; uno se abre al tocarlo |
 | Confirmación | `scenes/RsvpScene.tsx` | Entrada al RSVP |
@@ -111,9 +112,15 @@ secreta. Consecuencias:
 
 ## 3. Rendimiento
 
-- **Cero imágenes.** Toda la ilustración es SVG dibujado a mano en
-  `components/art/`. No hay descargas grandes, ni saltos de maquetación, ni
-  licencias que revisar.
+- **Casi cero imágenes.** Salvo la ilustración de la pareja, todo es SVG:
+  la botánica en acuarela, los anillos, el sobre y el monograma. La
+  iconografía viene de `lucide-react` (ISC), que se sacude en el build y solo
+  embarca los iconos usados.
+- **Los filtros SVG de la botánica se rasterizan una sola vez.** Por eso el
+  marco floral respira con `opacity` y no con `scale`: transformar un subárbol
+  filtrado obliga a recalcular las 180 formas de cada ramo en cada fotograma,
+  mientras que la opacidad la aplica el compositor sobre el mapa de bits ya
+  hecho. En pantallas estrechas, además, cada ramo monta menos piezas.
 - **Tres tipografías**, subconjunto latino, servidas desde el propio dominio por
   `next/font`. Sin peticiones a terceros y sin parpadeo.
 - **Las partículas se animan con CSS**, no con JavaScript: corren en el
@@ -168,7 +175,33 @@ secreta. Consecuencias:
 
 ---
 
-## 6. La música
+## 6. Las flores
+
+El marco floral (`components/invitation/FloralFrame.tsx`) va **fijo al
+viewport**, no dentro del documento: enmarca la lectura como el paspartú de un
+cuadro en lugar de desfilar por encima del texto. Tres decisiones lo hacen
+seguro para el contenido, y están comprobadas midiendo el solape real entre
+las cajas de texto y las de los ramos a trece alturas de scroll, en 375 px y
+en 1280 px: **cero solapes**.
+
+- Cada ramo lleva una máscara radial que lo disuelve hacia el centro, así que
+  nunca hay un borde duro sobre una palabra.
+- El tamaño se calcula con `vmin` y no con `vw`: en apaisado o en una pantalla
+  muy ancha el ramo no se dispara. Van de 112 px en un teléfono a 292 px en
+  escritorio, y cada esquina tiene su propia escala para que no parezca una
+  plantilla.
+- Los ramos asoman un poco fuera del borde, de modo que el peso visual queda
+  en la esquina y la columna de lectura queda libre.
+
+Sobre el realismo: no hay ni una fotografía. Las flores se pintan con
+`feTurbulence` + `feDisplacementMap`, que rompe los bordes de forma irregular
+—la diferencia entre un trazo pintado y uno vectorial—, más un degradado
+radial por pétalo que imita el pigmento acumulándose donde el agua se seca.
+Están en `components/art/Botanical.tsx`.
+
+---
+
+## 7. La música
 
 Arranca en el mismo manejador del toque que abre el sobre, no después. Es
 deliberado: Safari en iOS exige que `play()` se llame dentro del propio gesto
@@ -184,7 +217,7 @@ llegar a tiempo.
 
 ---
 
-## 7. Cosas que quedaron preparadas y no encendidas
+## 8. Cosas que quedaron preparadas y no encendidas
 
 - **Punto exacto en los mapas.** Ahora se busca por dirección completa, que es
   correcto y no inventa coordenadas. Cuando se confirme el sitio exacto, se pega

@@ -77,6 +77,15 @@ export const wedding = {
       text: "Así que ya no son dos, sino uno solo.",
       reference: "Mateo 19:6",
     },
+    dressCode: {
+      eyebrow: "Para acompañarnos",
+      title: "Código de vestimenta",
+      level: "Formal",
+      /** La regla que de verdad hay que comunicar, dicha con cariño. */
+      note: "Se reserva el color blanco para la novia.",
+      hint: "Vestido largo o midi para ellas, traje oscuro para ellos.",
+      warm: "Y unos zapatos con los que se pueda bailar hasta tarde.",
+    },
     gift: {
       intro:
         "Tu presencia es el mejor regalo que nos puedes dar en este día. Pero si quieres tener un detalle con nosotros y contribuir al comienzo de nuestra historia, será bienvenido.",

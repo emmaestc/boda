@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
+import { Music } from "lucide-react";
 import { wedding } from "@/lib/config/wedding";
 
 /** Filete de progreso en el borde derecho: orienta sin estorbar. */
@@ -92,6 +93,11 @@ export function MusicToggle({
             title={wedding.music.title + " — " + wedding.music.artist}
             className="group flex h-11 items-center gap-2.5 rounded-full border border-gold/35 bg-white/70 px-4 backdrop-blur-md transition-colors hover:border-gold hover:bg-white/90"
           >
+            <Music
+              aria-hidden
+              className="h-[1.05rem] w-[1.05rem] shrink-0 text-gold-text"
+              strokeWidth={1.7}
+            />
             <span className="flex h-4 items-end gap-[3px]" aria-hidden>
               {[0, 1, 2].map((i) => (
                 <motion.span

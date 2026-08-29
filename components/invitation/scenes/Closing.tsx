@@ -3,7 +3,7 @@
 import { Scene } from "@/components/invitation/Scene";
 import { Reveal } from "@/components/ui/Reveal";
 import { Monogram } from "@/components/art/Monogram";
-import { Cross } from "@/components/art/Icons";
+import { Cross } from "lucide-react";
 import { FloralCorner } from "@/components/art/Floral";
 import { wedding } from "@/lib/config/wedding";
 
@@ -15,7 +15,7 @@ export function Closing() {
       <FloralCorner className="pointer-events-none absolute -right-6 bottom-0 w-40 rotate-180 text-gold/20 sm:w-56" />
 
       <Reveal>
-        <Cross className="w-7 text-gold/70" />
+        <Cross className="h-8 w-8 text-gold/80" strokeWidth={1.2} />
       </Reveal>
 
       <Reveal delay={0.15}>

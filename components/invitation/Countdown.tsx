@@ -45,7 +45,12 @@ const LABELS = [
 function Unit({ value, label }: { value: number; label: string }) {
   const text = String(value).padStart(2, "0");
   return (
-    <div className="flex min-w-[3.6rem] flex-col items-center gap-1.5">
+    <div className="relative flex min-w-[4.4rem] flex-col items-center gap-1 rounded-2xl border border-gold/30 bg-white/60 px-2 py-3.5 sm:min-w-[5rem]">
+      {/* Esquinas marcadas: el detalle que convierte una cifra en una pieza */}
+      <span className="pointer-events-none absolute left-1.5 top-1.5 h-2 w-2 border-l border-t border-gold/55" />
+      <span className="pointer-events-none absolute right-1.5 top-1.5 h-2 w-2 border-r border-t border-gold/55" />
+      <span className="pointer-events-none absolute bottom-1.5 left-1.5 h-2 w-2 border-b border-l border-gold/55" />
+      <span className="pointer-events-none absolute bottom-1.5 right-1.5 h-2 w-2 border-b border-r border-gold/55" />
       <div className="relative h-11 overflow-hidden">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.span
@@ -77,18 +82,18 @@ export function Countdown() {
   // Render del servidor y primer render del cliente: un hueco de la misma
   // altura, para que nada salte al hidratar.
   if (remaining === null) {
-    return <div aria-hidden className="h-[4.4rem]" />;
+    return <div aria-hidden className="h-[6.4rem]" />;
   }
 
   if (remaining === 0) {
-    return <p className="font-script text-3xl text-gold-deep">Hoy es el día</p>;
+    return <p className="font-script text-5xl text-gilded animate-shimmer">Hoy es el día</p>;
   }
 
   const days = Math.floor(remaining / 86400);
 
   return (
     <div
-      className="flex items-start justify-center gap-1 sm:gap-3"
+      className="flex flex-wrap items-center justify-center gap-y-3"
       role="timer"
       aria-live="off"
       aria-label={"Faltan " + days + " días para la ceremonia"}
@@ -97,11 +102,12 @@ export function Countdown() {
         const raw = Math.floor(remaining / unit.divisor);
         const value = "modulo" in unit ? raw % unit.modulo : raw;
         return (
-          <div key={unit.key} className="flex items-start">
+          <div key={unit.key} className="flex items-center">
             {i > 0 && (
-              <span className="mt-1 px-0.5 font-serif text-3xl font-light text-gold/60 sm:px-1.5">
-                ·
-              </span>
+              <span
+                aria-hidden
+                className="mx-0.5 block h-1.5 w-1.5 rotate-45 border border-gold/70 sm:mx-1.5"
+              />
             )}
             <Unit value={value} label={unit.key} />
           </div>

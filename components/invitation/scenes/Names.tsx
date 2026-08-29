@@ -60,7 +60,7 @@ export function Names() {
         transition={{ duration: 2.4, ease: EASE_SILK, delay: 0.3 }}
       >
         <div
-          className="h-[min(78vw,26rem)] w-[min(78vw,26rem)] bg-[url('/images/novios.jpg')] bg-cover bg-center opacity-[0.22] blur-[7px] saturate-[0.85]"
+          className="h-[min(78vw,26rem)] w-[min(78vw,26rem)] bg-[url('/images/novios.png')] bg-cover bg-center opacity-[0.22] blur-[7px] saturate-[0.85]"
           style={{
             maskImage: "radial-gradient(circle at 50% 45%, #000 32%, transparent 72%)",
             WebkitMaskImage: "radial-gradient(circle at 50% 45%, #000 32%, transparent 72%)",

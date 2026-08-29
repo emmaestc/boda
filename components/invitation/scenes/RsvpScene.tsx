@@ -6,7 +6,8 @@ import { Scene, Eyebrow } from "@/components/invitation/Scene";
 import { Reveal } from "@/components/ui/Reveal";
 import { ActionButton } from "@/components/ui/Button";
 import { RsvpDialog } from "@/components/rsvp/RsvpDialog";
-import { Divider, Heart } from "@/components/art/Icons";
+import { Divider } from "@/components/art/Icons";
+import { HandHeart } from "lucide-react";
 import { FloralWreath } from "@/components/art/Floral";
 import { inViewOnce } from "@/lib/motion";
 import { wedding } from "@/lib/config/wedding";
@@ -24,7 +25,7 @@ function CurrentAnswer({ guest }: { guest: PublicGuest }) {
 
   return (
     <div className="mt-6 inline-flex items-center gap-2.5 rounded-full border border-gold/40 bg-white/70 px-5 py-2.5">
-      <Heart className="h-3.5 w-3.5 text-gold-deep" />
+      <HandHeart className="h-[1.05rem] w-[1.05rem] text-gold-text" strokeWidth={1.6} />
       <span className="font-sans text-[0.9rem] tracking-[0.16em] text-ink-soft">{text}</span>
     </div>
   );

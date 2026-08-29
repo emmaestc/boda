@@ -6,7 +6,8 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Scene, Eyebrow } from "@/components/invitation/Scene";
 import { Reveal } from "@/components/ui/Reveal";
 import { RevealText } from "@/components/ui/RevealText";
-import { Heart, Divider } from "@/components/art/Icons";
+import { Divider } from "@/components/art/Icons";
+import { Heart } from "lucide-react";
 import { EASE_SILK } from "@/lib/motion";
 import { wedding } from "@/lib/config/wedding";
 
@@ -90,7 +91,7 @@ function GiftEnvelope() {
             exit={{ y: 10, opacity: 0 }}
             transition={{ duration: 0.8, ease: EASE_SILK, delay: reduced ? 0 : 0.35 }}
           >
-            <Heart className="w-5 text-gold-deep" />
+            <Heart className="h-5 w-5 text-gold-deep" strokeWidth={1.5} />
             <span className="font-script text-lg text-ink-soft">Gracias</span>
           </motion.div>
         )}
