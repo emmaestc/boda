@@ -299,7 +299,19 @@ export function RsvpDialog({
               <div className="relative flex flex-col items-center gap-5 py-6 text-center">
                 <Burst />
                 <Monogram size={72} />
-                <h3 className="font-script text-[2.6rem] leading-tight text-gold-deep">
+                {/*
+                  En manuscrita no se leía. Great Vibes es preciosa para una
+                  firma, pero "¡Qué felicidad!" lleva una Q muy floreada, dos
+                  tildes y una exclamación de apertura, y todo junto a 42 px en
+                  un teléfono se convierte en un adorno que hay que descifrar.
+                  Va en la serif de los títulos, que es la voz de la invitación,
+                  y en `gold-text`: el oro oscurecido que existe justo para
+                  cuando el dorado tiene que leerse y no solo decorar.
+
+                  Encima queda una sola pieza manuscrita, el monograma, en vez
+                  de dos apiladas.
+                */}
+                <h3 className="font-serif text-[2.4rem] leading-tight font-light text-gold-text sm:text-[2.7rem]">
                   {answer.attending ? "¡Qué felicidad!" : "Te vamos a extrañar"}
                 </h3>
                 <Divider className="w-36 text-gold" />
@@ -382,9 +394,9 @@ export function RsvpDialog({
                         {guest.cupo > 1 && (
                           <p className="font-sans text-[0.95rem] text-ink-faint">
                             {guest.cupoFijo
-                              ? "Esta invitación es para los " +
+                              ? "Esta invitación es para " +
                                 guest.cupo +
-                                ", así que respondes por todos."
+                                " personas."
                               : "Tienes " + guest.cupo + " lugares reservados."}
                           </p>
                         )}
