@@ -26,7 +26,7 @@ import type { PublicGuest } from "@/lib/guests/types";
 /** Saludo nominal: solo existe cuando la invitación es de alguien concreto. */
 function Greeting({ name, cupo }: { name: string; cupo: number }) {
   return (
-    <Scene tall={false} className="pb-4 pt-28">
+    <Scene tall={false} className="pt-28 pb-0 sm:pb-0">
       <Reveal>
         <Eyebrow>Con toda nuestra alegría, invitamos a</Eyebrow>
       </Reveal>

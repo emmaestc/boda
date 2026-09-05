@@ -12,14 +12,28 @@ import { wedding } from "@/lib/config/wedding";
 
 const copy = wedding.copy.dressCode;
 
+/** La silueta a 12 px de ancho: viaja dentro del HTML, sin peticion propia. */
+const SILUETA_BORROSA =
+  "data:image/webp;base64,UklGRvAAAABXRUJQVlA4WAoAAAAQAAAACwAADQAAQUxQSGAAAAARb6CgbRs2VADdvxERsJ7c66nNJ9xU27YsN+4SgZ0GpCACu0sBd9itATGYfHXuNJSI6H8A3SpQuK6AVv1UgsrdOvBxDbwtQktT8NQ4ZTXGUY3yUGP5j/5iPf/Dw2Y/CwNWUDggagAAABACAJ0BKgwADgADgFwlpAAPjk1SPjsNaQAA/tInPrlfWtMo+JGkGNkTW5KL7Ak//Et9X9xL4LRtgR88H5c3OYr5iH40yFidbQEy43fROmNzzE59B9Mi5iMq6sspzCjAWlg62HvszkAAAAA=";
+
 /**
  * Los novios, dentro de un medallón.
  *
  * La silueta es una imagen con fondo transparente, no un dibujo vectorial:
  * dos figuras abrazadas tienen demasiada anatomía para resolverlas a mano y
- * el resultado se notaba. Va por `next/image`, que la sirve en WebP al
- * tamaño real de pantalla —unos pocos kilobytes en lugar de los 600 KB del
- * original.
+ * el resultado se notaba.
+ *
+ * Tardaba en aparecer con conexiones lentas, y eran tres causas a la vez:
+ * el archivo pesaba 605 KB a 1152 px para verse a 105, el optimizador tenía
+ * que transformar todo eso en la primera visita, y hasta que llegaba no había
+ * nada que mirar. Ahora el origen son 38 KB a 512 px, la carga es `eager`
+ * —mientras se mira el sobre hay tiempo de sobra— y entretanto se ve una
+ * versión minúscula y borrosa incrustada en el propio HTML.
+ *
+ * El origen sigue siendo PNG a propósito, aunque pese más que un WebP: solo
+ * lo lee el optimizador, nunca el visitante. Con origen WebP, a un cliente
+ * que no anuncie ese formato Next le devolvía un JPEG, y el JPEG no tiene
+ * canal alfa: la silueta recortada aparecía sobre un rectángulo negro.
  */
 function Medallon() {
   return (
@@ -59,6 +73,9 @@ function Medallon() {
           alt=""
           width={240}
           height={285}
+          loading="eager"
+          placeholder="blur"
+          blurDataURL={SILUETA_BORROSA}
           className="h-[6.6rem] w-auto"
         />
       </motion.div>
