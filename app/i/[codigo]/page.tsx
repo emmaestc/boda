@@ -10,9 +10,16 @@ import { wedding } from "@/lib/config/wedding";
 export const dynamic = "force-dynamic";
 
 /**
- * El nombre del invitado no aparece en los metadatos: si el enlace se comparte
- * o se previsualiza en una aplicación de mensajería, no debe filtrarse a quién
- * pertenece la invitación.
+ * El título y la descripción son los mismos para todo el mundo. El nombre de
+ * quien recibe la invitación sí aparece, pero solo dentro de la imagen que
+ * dibuja `opengraph-image.tsx`, que es la que ve WhatsApp.
+ *
+ * Es una decisión tomada sabiendo lo que cuesta: al viajar en la tarjeta, el
+ * nombre acompaña al enlace si alguien lo reenvía. Se aceptó porque estas
+ * invitaciones se envían de una en una y la página ya muestra el nombre en
+ * grande; a cambio, la vista previa deja de ser genérica.
+ *
+ * `noindex` se queda: que sea personal no significa que deba indexarse.
  */
 export const metadata: Metadata = {
   title: wedding.seo.title,
