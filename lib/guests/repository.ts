@@ -12,7 +12,7 @@ import type { Diet, Guest, GuestStats, PublicGuest } from "./types";
  */
 
 const PUBLIC_COLUMNS =
-  "nombre, codigo_invitacion, cantidad_personas_permitidas, estado_confirmacion, " +
+  "nombre, codigo_invitacion, cantidad_personas_permitidas, cupo_fijo, estado_confirmacion, " +
   "cantidad_asistentes, nombres_asistentes, restriccion_alimentaria, " +
   "restriccion_detalle, comentario";
 
@@ -20,6 +20,7 @@ type PublicRow = {
   nombre: string;
   codigo_invitacion: string;
   cantidad_personas_permitidas: number;
+  cupo_fijo: boolean;
   estado_confirmacion: PublicGuest["estado"];
   cantidad_asistentes: number;
   nombres_asistentes: string[] | null;
@@ -33,6 +34,7 @@ function toPublicGuest(row: PublicRow): PublicGuest {
     nombre: row.nombre,
     codigo: row.codigo_invitacion,
     cupo: row.cantidad_personas_permitidas,
+    cupoFijo: row.cupo_fijo,
     estado: row.estado_confirmacion,
     asistentes: row.cantidad_asistentes,
     nombres: row.nombres_asistentes ?? [],
@@ -88,20 +90,28 @@ export async function saveRsvp(
 
   const { data: existing, error: findError } = await db
     .from("guests")
-    .select("id, cantidad_personas_permitidas")
+    .select("id, cantidad_personas_permitidas, cupo_fijo")
     .eq("codigo_invitacion", payload.codigo)
-    .maybeSingle<{ id: string; cantidad_personas_permitidas: number }>();
+    .maybeSingle<{ id: string; cantidad_personas_permitidas: number; cupo_fijo: boolean }>();
 
   if (findError) return { ok: false, error: "No pudimos guardar tu respuesta. Inténtalo de nuevo." };
   if (!existing) return { ok: false, error: "Esta invitación no existe." };
 
-  const cantidad = payload.asiste
-    ? Math.min(Math.max(payload.cantidad, 1), existing.cantidad_personas_permitidas)
-    : 0;
+  /*
+   * Con cupo fijo el número no se negocia: la invitación va a nombre de todo
+   * el grupo, a esa persona nunca se le preguntó cuántos vienen, y lo que
+   * mande el navegador da igual. Lo decide el servidor leyendo la fila.
+   */
+  const cantidad = !payload.asiste
+    ? 0
+    : existing.cupo_fijo
+      ? existing.cantidad_personas_permitidas
+      : Math.min(Math.max(payload.cantidad, 1), existing.cantidad_personas_permitidas);
 
   // Nunca más nombres que asistentes: si alguien bajó la cantidad después de
-  // escribirlos, sobran los últimos.
-  const nombres = payload.asiste ? payload.nombres.slice(0, cantidad) : [];
+  // escribirlos, sobran los últimos. Con cupo fijo no se piden.
+  const nombres =
+    payload.asiste && !existing.cupo_fijo ? payload.nombres.slice(0, cantidad) : [];
 
   const { data: updated, error: updateError } = await db
     .from("guests")
@@ -173,6 +183,7 @@ export async function getStats(): Promise<GuestStats> {
 export type GuestDraft = {
   nombre: string;
   cantidad_personas_permitidas: number;
+  cupo_fijo?: boolean;
   grupo?: string | null;
 };
 
@@ -187,6 +198,7 @@ export async function createGuest(draft: GuestDraft): Promise<Guest> {
         nombre: draft.nombre,
         codigo_invitacion: generateInvitationCode(),
         cantidad_personas_permitidas: draft.cantidad_personas_permitidas,
+        cupo_fijo: draft.cupo_fijo ?? false,
         grupo: draft.grupo || null,
       })
       .select("*")
@@ -204,6 +216,7 @@ export async function createGuest(draft: GuestDraft): Promise<Guest> {
 export type GuestPatch = Partial<{
   nombre: string;
   cantidad_personas_permitidas: number;
+  cupo_fijo: boolean;
   grupo: string | null;
   estado_confirmacion: Guest["estado_confirmacion"];
   cantidad_asistentes: number;

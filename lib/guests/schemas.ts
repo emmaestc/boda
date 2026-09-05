@@ -50,6 +50,12 @@ export const rsvpInputSchema = z.object({
 export const guestFormSchema = z.object({
   nombre: cleanText(120).pipe(z.string().min(2, "El nombre es obligatorio")),
   cantidad_personas_permitidas: z.coerce.number().int().min(1).max(20),
+  /*
+   * Booleano de verdad, sin `coerce`: `z.coerce.boolean()` convierte la
+   * cadena "false" en `true`, que es justo el error que este campo no puede
+   * permitirse. El panel envía un boolean real.
+   */
+  cupo_fijo: z.boolean().optional().default(false),
   grupo: cleanText(60).nullable().optional(),
   estado_confirmacion: z.enum(CONFIRMATION_STATUS).optional(),
   cantidad_asistentes: z.coerce.number().int().min(0).max(20).optional(),

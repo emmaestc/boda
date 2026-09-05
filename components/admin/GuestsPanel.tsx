@@ -232,9 +232,18 @@ export function GuestsPanel({ guests, baseUrl }: { guests: Guest[]; baseUrl: str
                   <span className="font-serif text-lg leading-tight font-light text-ink">
                     {guest.nombre}
                   </span>
-                  <span className="font-sans text-[0.8rem] tracking-[0.1em] text-ink-faint">
-                    {guest.grupo ? guest.grupo + " · " : ""}
-                    {guest.codigo_invitacion}
+                  <span className="flex flex-wrap items-center gap-x-2 gap-y-1 font-sans text-[0.8rem] tracking-[0.1em] text-ink-faint">
+                    <span>
+                      {guest.grupo ? guest.grupo + " · " : ""}
+                      {guest.codigo_invitacion}
+                    </span>
+                    {/* Sin ella no habría forma de ver, desde la lista, por qué
+                        a este invitado no se le pidieron nombres. */}
+                    {guest.cupo_fijo && (
+                      <span className="rounded-full border border-gold/40 bg-gold-light/25 px-2 py-0.5 text-[0.7rem] tracking-[0.14em] text-gold-text uppercase">
+                        Cupo fijo
+                      </span>
+                    )}
                   </span>
                 </span>
 

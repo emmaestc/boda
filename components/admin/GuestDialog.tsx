@@ -8,12 +8,14 @@ import type { Guest } from "@/lib/guests/types";
 export type GuestDraftForm = {
   nombre: string;
   cantidad_personas_permitidas: number;
+  cupo_fijo: boolean;
   grupo: string;
 };
 
 const EMPTY: GuestDraftForm = {
   nombre: "",
   cantidad_personas_permitidas: 1,
+  cupo_fijo: false,
   grupo: "",
 };
 
@@ -74,6 +76,7 @@ export function GuestDialog({
         ? {
             nombre: guest.nombre,
             cantidad_personas_permitidas: guest.cantidad_personas_permitidas,
+            cupo_fijo: guest.cupo_fijo,
             grupo: guest.grupo ?? "",
           }
         : EMPTY,
@@ -150,6 +153,32 @@ export function GuestDialog({
                   required
                 />
               </Field>
+
+              {/*
+                Casilla, no campo: es un matiz de los lugares reservados, y
+                por eso va pegada a ellos y no en su propia fila con etiqueta
+                en versalitas como los demás.
+              */}
+              <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-powder bg-white/60 px-3.5 py-3">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-[#9a7c3e]"
+                  checked={form.cupo_fijo}
+                  onChange={(e) => setForm((f) => ({ ...f, cupo_fijo: e.target.checked }))}
+                />
+                <span className="flex flex-col gap-0.5">
+                  <span className="font-sans text-sm text-ink">
+                    La invitación ya nombra a todo el grupo
+                  </span>
+                  <span className="font-sans text-[0.86rem] leading-snug text-ink-faint">
+                    Para invitaciones como &laquo;Lorena y Miguel&raquo;. No se les pregunta
+                    cuántos vienen ni se les piden nombres: al confirmar cuentan por los
+                    {" "}
+                    {form.cantidad_personas_permitidas}{" "}
+                    {form.cantidad_personas_permitidas === 1 ? "lugar" : "lugares"} de arriba.
+                  </span>
+                </span>
+              </label>
 
               <Field label="Grupo" hint="Opcional. Por ejemplo: familia del novio, amigos, trabajo.">
                 <input

@@ -29,6 +29,11 @@ export type PublicGuest = {
   nombre: string;
   codigo: string;
   cupo: number;
+  /**
+   * La invitación ya nombra a todo el grupo, así que no se pregunta cuántos
+   * vienen ni se piden nombres: al confirmar cuentan los lugares reservados.
+   */
+  cupoFijo: boolean;
   estado: ConfirmationStatus;
   asistentes: number;
   /** Quiénes vienen, cuando la invitación cubre a más de una persona. */
@@ -45,6 +50,7 @@ export type Guest = {
   codigo_invitacion: string;
   grupo: string | null;
   cantidad_personas_permitidas: number;
+  cupo_fijo: boolean;
   estado_confirmacion: ConfirmationStatus;
   cantidad_asistentes: number;
   nombres_asistentes: string[];

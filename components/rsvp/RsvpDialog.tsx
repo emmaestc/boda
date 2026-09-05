@@ -202,12 +202,19 @@ export function RsvpDialog({
   const stepsForNo: Step[] = ["asistencia", "mensaje"];
   const steps = answer.attending === false ? stepsForNo : stepsForYes;
 
-  const asistentes = guest.cupo <= 1 ? 1 : answer.count;
+  /*
+   * Con cupo fijo la invitación ya nombra a todo el grupo —"Lorena y
+   * Miguel"—, así que preguntar cuántos vienen y luego pedir el nombre del
+   * acompañante era pedir dos veces lo que el encabezado ya dice. Vienen los
+   * lugares reservados, y punto.
+   */
+  const asistentes = guest.cupoFijo ? guest.cupo : guest.cupo <= 1 ? 1 : answer.count;
+
   const visibleSteps = steps.filter((s) => {
-    // Con un solo cupo no tiene sentido preguntar cuántos vendrán.
-    if (s === "cuantos") return guest.cupo > 1;
+    // Con un solo cupo, o con el cupo fijado, no hay nada que preguntar.
+    if (s === "cuantos") return guest.cupo > 1 && !guest.cupoFijo;
     // Ni pedir nombres si viene una sola persona: ya sabemos quién es.
-    if (s === "acompanantes") return asistentes > 1;
+    if (s === "acompanantes") return asistentes > 1 && !guest.cupoFijo;
     return true;
   });
   const current = visibleSteps[Math.min(step, visibleSteps.length - 1)];
@@ -230,7 +237,7 @@ export function RsvpDialog({
       asiste: answer.attending === true,
       cantidad: answer.attending === true ? asistentes : 0,
       nombres:
-        answer.attending === true && asistentes > 1
+        answer.attending === true && asistentes > 1 && !guest.cupoFijo
           ? answer.nombres.slice(0, asistentes).map((n) => n.trim())
           : [],
       restriccion: answer.attending === true ? answer.diet : "ninguna",
@@ -364,7 +371,11 @@ export function RsvpDialog({
                         </div>
                         {guest.cupo > 1 && (
                           <p className="font-sans text-[0.95rem] text-ink-faint">
-                            Tienes {guest.cupo} lugares reservados.
+                            {guest.cupoFijo
+                              ? "Esta invitación es para los " +
+                                guest.cupo +
+                                ", así que respondes por todos."
+                              : "Tienes " + guest.cupo + " lugares reservados."}
                           </p>
                         )}
                       </StepShell>

@@ -25,6 +25,10 @@ create table if not exists public.guests (
   codigo_invitacion             text not null unique,
   grupo                         text,
   cantidad_personas_permitidas  smallint not null default 1,
+  -- Invitaciones a nombre de varias personas ("Lorena y Miguel"): el cupo se
+  -- da por hecho. A quien la recibe no se le pregunta cuantos van ni se le
+  -- piden nombres, y al confirmar cuenta por los lugares reservados.
+  cupo_fijo                     boolean not null default false,
   estado_confirmacion           estado_confirmacion not null default 'pendiente',
   cantidad_asistentes           smallint not null default 0,
   -- Quiénes vienen exactamente. Se piden en el RSVP cuando la invitación
@@ -78,6 +82,10 @@ alter table public.guests drop column if exists telefono;
 
 alter table public.guests
   add column if not exists nombres_asistentes text[] not null default '{}';
+
+-- Cupo fijo: invitaciones que ya nombran a todo el grupo.
+alter table public.guests
+  add column if not exists cupo_fijo boolean not null default false;
 
 do $$
 begin

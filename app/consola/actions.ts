@@ -68,6 +68,7 @@ export async function crearInvitado(input: unknown): Promise<ActionResult> {
     await createGuest({
       nombre: parsed.data.nombre,
       cantidad_personas_permitidas: parsed.data.cantidad_personas_permitidas,
+      cupo_fijo: parsed.data.cupo_fijo,
       grupo: parsed.data.grupo ?? null,
     });
     refresh();
@@ -91,6 +92,7 @@ export async function actualizarInvitado(id: string, input: unknown): Promise<Ac
     await updateGuest(idOk.data, {
       nombre: parsed.data.nombre,
       cantidad_personas_permitidas: parsed.data.cantidad_personas_permitidas,
+      cupo_fijo: parsed.data.cupo_fijo,
       grupo: parsed.data.grupo ?? null,
     });
     refresh();
