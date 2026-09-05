@@ -35,8 +35,18 @@ export default async function InvitacionPersonal({
 
   if (!isValidCodeShape(code)) notFound();
 
-  // Freno a la enumeración de códigos: 30 consultas por IP cada cinco minutos.
-  const allowed = await withinRateLimit(await requesterKey("invitacion"), 30, 300);
+  /*
+   * Freno a la enumeración de códigos: 120 consultas por IP cada cinco minutos.
+   *
+   * La cuenta va por IP, y los operadores móviles reparten una misma IP pública
+   * entre muchos abonados. Con las invitaciones saliéndose todas a la vez por
+   * WhatsApp, treinta se agotaban entre invitados de verdad que compartieran
+   * salida, y al que llegara tarde le salía "No encontramos esta invitación".
+   *
+   * Aflojarlo no regala nada: son 30^10 códigos posibles, así que desde una IP
+   * haran falta 47 años para probar una millonésima parte del espacio.
+   */
+  const allowed = await withinRateLimit(await requesterKey("invitacion"), 120, 300);
   if (!allowed) notFound();
 
   const guest = await findPublicGuest(code);

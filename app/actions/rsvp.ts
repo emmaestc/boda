@@ -22,7 +22,9 @@ export async function submitRsvp(raw: unknown): Promise<RsvpResult> {
   }
 
   const key = await requesterKey("rsvp");
-  const allowed = await withinRateLimit(key, 15, 300);
+  // Tambien por IP, y por lo mismo: varias familias tras la misma salida
+  // de un operador movil no pueden quedarse sin poder confirmar.
+  const allowed = await withinRateLimit(key, 40, 300);
   if (!allowed) {
     return { ok: false, error: "Demasiados intentos seguidos. Espera unos minutos." };
   }

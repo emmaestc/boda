@@ -25,7 +25,7 @@ create table if not exists public.guests (
   codigo_invitacion             text not null unique,
   grupo                         text,
   cantidad_personas_permitidas  smallint not null default 1,
-  -- Invitaciones a nombre de varias personas ("Lorena y Miguel"): el cupo se
+  -- Invitaciones a nombre de varias personas: el cupo se
   -- da por hecho. A quien la recibe no se le pregunta cuantos van ni se le
   -- piden nombres, y al confirmar cuenta por los lugares reservados.
   cupo_fijo                     boolean not null default false,

@@ -202,12 +202,6 @@ export function RsvpDialog({
   const stepsForNo: Step[] = ["asistencia", "mensaje"];
   const steps = answer.attending === false ? stepsForNo : stepsForYes;
 
-  /*
-   * Con cupo fijo la invitación ya nombra a todo el grupo —"Lorena y
-   * Miguel"—, así que preguntar cuántos vienen y luego pedir el nombre del
-   * acompañante era pedir dos veces lo que el encabezado ya dice. Vienen los
-   * lugares reservados, y punto.
-   */
   const asistentes = guest.cupoFijo ? guest.cupo : guest.cupo <= 1 ? 1 : answer.count;
 
   const visibleSteps = steps.filter((s) => {
@@ -226,12 +220,6 @@ export function RsvpDialog({
       return { ...a, count: total, nombres: ajustarNombres(a.nombres, total, guest.nombre) };
     });
 
-  /*
-   * El cierre se ajusta a cuántos vienen. Con "Lorena y Miguel" decía
-   * "Gracias por confirmar, Lorena. Guardamos un lugar para ti": medio nombre
-   * y en singular, para una invitación de dos. Cuando la invitación nombra al
-   * grupo se saluda al grupo entero, porque ese nombre ya son los dos.
-   */
   const saludoFinal = guest.cupoFijo ? guest.nombre : guest.nombre.split(" ")[0];
   const lugaresGuardados =
     asistentes > 1

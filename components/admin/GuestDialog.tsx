@@ -171,7 +171,7 @@ export function GuestDialog({
                     La invitación ya nombra a todo el grupo
                   </span>
                   <span className="font-sans text-[0.86rem] leading-snug text-ink-faint">
-                    Para invitaciones como &laquo;Lorena y Miguel&raquo;. No se les pregunta
+                    Para invitaciones de varias personas. No se les pregunta
                     cuántos vienen ni se les piden nombres: al confirmar cuentan por los
                     {" "}
                     {form.cantidad_personas_permitidas}{" "}
