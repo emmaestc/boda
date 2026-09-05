@@ -10,7 +10,7 @@
  * las dos mitades de la banda se van hacia los lados y el nudo se afloja.
  */
 
-export function RibbonDefs() {
+function RibbonDefs() {
   return (
     <defs>
       {/* Lomo de la lazada: la luz pega arriba y la sombra se hunde abajo */}

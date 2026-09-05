@@ -9,10 +9,7 @@
 @theme {
   --color-porcelain: #fcfbf8;
   --color-mist: #f2f6fb;
-  --color-sky: #e2ecf7;
   --color-powder: #c7dbee;
-  --color-azure: #9dbcda;
-  --color-deep: #5c7f9f;
 
   --color-ink: #24384f;
   --color-ink-soft: #4d6478;
@@ -26,9 +23,7 @@
   /* Oro oscurecido hasta 5.5:1, para cuando el dorado se usa en texto. */
   --color-gold-text: #7d6330;
 
-  --color-blush: #f4e3df;
   --color-rose: #e7c8c2;
-  --color-sage: #a9bfa5;
 
   --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --font-script: var(--font-vibes), "Great Vibes", cursive;
@@ -85,10 +80,6 @@ body {
   outline: 2px solid var(--color-gold);
   outline-offset: 3px;
   border-radius: 4px;
-}
-
-@utility text-shadow-soft {
-  text-shadow: 0 1px 24px rgba(255, 255, 255, 0.85);
 }
 
 /* Texto con degradado dorado. */

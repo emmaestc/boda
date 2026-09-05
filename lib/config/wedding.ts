@@ -135,5 +135,3 @@ export const wedding = {
     url: "https://johanayemmanuel.vercel.app",
   },
 } as const;
-
-export type Wedding = typeof wedding;

@@ -1,5 +1,5 @@
 import "server-only";
-import { randomBytes, scrypt, timingSafeEqual } from "node:crypto";
+import { scrypt, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 
 const scryptAsync = promisify(scrypt) as (
@@ -13,7 +13,6 @@ const scryptAsync = promisify(scrypt) as (
 const N = 16384;
 const R = 8;
 const P = 1;
-const KEYLEN = 32;
 
 /**
  * Formato del hash: `scrypt:N:r:p:sal:clave`, con sal y clave en base64url.
@@ -25,13 +24,6 @@ const KEYLEN = 32;
  * intacto tanto en `.env.local` como en el panel de Vercel.
  */
 const PREFIX = "scrypt:";
-
-/** Genera el valor de `CONSOLE_PASSWORD_HASH`. */
-export async function hashPassword(plain: string): Promise<string> {
-  const salt = randomBytes(16);
-  const key = await scryptAsync(plain, salt, KEYLEN, { N, r: R, p: P });
-  return [PREFIX + N, R, P, salt.toString("base64url"), key.toString("base64url")].join(":");
-}
 
 /** Comparación en tiempo constante: no filtra información por la duración. */
 function constantTimeEquals(a: Buffer, b: Buffer): boolean {

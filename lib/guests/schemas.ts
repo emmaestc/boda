@@ -46,7 +46,6 @@ export const rsvpInputSchema = z.object({
   comentario: cleanText(500).nullable().optional(),
 });
 
-export type RsvpInput = z.infer<typeof rsvpInputSchema>;
 
 export const guestFormSchema = z.object({
   nombre: cleanText(120).pipe(z.string().min(2, "El nombre es obligatorio")),
@@ -56,7 +55,6 @@ export const guestFormSchema = z.object({
   cantidad_asistentes: z.coerce.number().int().min(0).max(20).optional(),
 });
 
-export type GuestFormInput = z.infer<typeof guestFormSchema>;
 
 export const loginSchema = z.object({
   usuario: z.string().trim().min(1).max(60),
