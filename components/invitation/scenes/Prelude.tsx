@@ -96,14 +96,15 @@ export function Prelude({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: EASE_SILK, delay: 0.25 }}
         >
+          {/*
+            El nombre de quien recibe la invitación ya no va aquí: ahora está
+            dentro, en la tarjeta que asoma al abrir el sobre. Repetirlo en
+            los dos sitios con dos segundos de diferencia le quitaba toda la
+            gracia al momento.
+          */}
           <p className="max-w-[16rem] text-center font-serif text-[1.6rem] leading-snug font-light text-ink-soft italic sm:max-w-none">
             {wedding.copy.envelope.eyebrow}
           </p>
-          {guestName && (
-            <p className="mt-2 font-sans text-[0.88rem] tracking-[0.36em] text-ink-faint uppercase">
-              Para {guestName}
-            </p>
-          )}
         </motion.div>
 
         <motion.div
@@ -111,7 +112,7 @@ export function Prelude({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1.4, ease: EASE_SILK, delay: 0.45 }}
         >
-          <Envelope opened={opening} onOpen={handleOpen} />
+          <Envelope opened={opening} onOpen={handleOpen} guestName={guestName} />
         </motion.div>
 
         <motion.button

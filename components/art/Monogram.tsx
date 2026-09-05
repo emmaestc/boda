@@ -31,6 +31,45 @@ const FONT_SIZE = Math.round(((RING_RADIUS * 2 * FILL) / INK_WIDTH_RATIO) * 10) 
 /** Línea base tal que el centro óptico de la tinta caiga en el centro del círculo. */
 const BASELINE = CENTER + ((ASCENT_RATIO - DESCENT_RATIO) * FONT_SIZE) / 2;
 
+/**
+ * Solo las iniciales, sin anillo, con el color que se le pida. La usa el lacre
+ * del sobre, donde las letras van en crema sobre el oro y un degradado dorado
+ * encima de otro dorado no se leería.
+ *
+ * `proporcion` es cuánto del diámetro ocupa la tinta: en el lacre conviene
+ * apurar más que en el monograma, que necesita aire hasta su anillo.
+ */
+export function Iniciales({
+  size = 48,
+  fill = "currentColor",
+  proporcion = FILL,
+  className = "",
+}: {
+  size?: number;
+  fill?: string;
+  proporcion?: number;
+  className?: string;
+}) {
+  const { first, second } = wedding.couple.initials;
+  const cuerpo = ((RING_RADIUS * 2 * proporcion) / INK_WIDTH_RATIO);
+  const base = CENTER + ((ASCENT_RATIO - DESCENT_RATIO) * cuerpo) / 2;
+
+  return (
+    <svg viewBox="0 0 120 120" width={size} height={size} className={className} aria-hidden>
+      <text
+        x={CENTER}
+        y={base}
+        textAnchor="middle"
+        fill={fill}
+        fontSize={cuerpo}
+        className="font-script"
+      >
+        {first} &amp; {second}
+      </text>
+    </svg>
+  );
+}
+
 export function Monogram({
   className = "",
   size = 96,
