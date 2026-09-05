@@ -132,6 +132,20 @@ export const wedding = {
     title: bride + " & " + groom + " — Nuestra historia",
     description:
       "Dos caminos que se encontraron en el momento indicado. Acompáñanos el 6 de noviembre de 2026 a celebrar nuestro matrimonio.",
-    url: "https://johanayemmanuel.vercel.app",
+    /**
+     * Dominio público. De aquí salen `og:image` y `og:url`, que son las que
+     * lee WhatsApp para dibujar la tarjeta del enlace, más el sitemap.
+     *
+     * Estuvo apuntando a "johanayemmanuel.vercel.app", sin guiones, que no
+     * existe: WhatsApp pedía la imagen, recibía un 404 y por eso la vista
+     * previa salía solo con texto. Como el enlace que se comparte sí era
+     * correcto —la consola lo arma con el host real de la petición— el fallo
+     * no se veía por ninguna otra parte.
+     *
+     * Va por variable de entorno para que un dominio propio no obligue a
+     * tocar código: basta con poner NEXT_PUBLIC_SITE_URL en Vercel.
+     */
+    url: (process.env.NEXT_PUBLIC_SITE_URL || "https://johana-y-emmanuel.vercel.app")
+      .replace(/\/+$/, ""),
   },
 } as const;
