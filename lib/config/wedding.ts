@@ -95,7 +95,7 @@ export const wedding = {
       title: "¡Te esperamos!",
       subtitle: "Confirma tu asistencia",
       cta: "Confirmar asistencia",
-      deadlineNote: "Agradecemos tu respuesta antes del 6 de octubre de 2026.",
+      deadlineNote: "Agradecemos tu respuesta antes del 10 de octubre de 2026.",
     },
     closing: "Gracias por ser parte de nuestra historia.",
   },
@@ -109,11 +109,23 @@ export const wedding = {
    * Con `src` en `null` el control desaparece y no suena nada.
    */
   music: {
-    src: "/music/perfect-violin.mp3",
-    title: "Perfect",
-    artist: "Ed Sheeran · versión para violín",
-    /** Volumen final del fundido de entrada, de 0 a 1. */
-    volume: 0.3,
+    src: "/music/eres-mi-sueno.mp3",
+    title: "Eres mi sueño",
+    artist: "Fonseca",
+    /**
+     * Volumen final del fundido de entrada, de 0 a 1.
+     *
+     * Este número va atado a la canción concreta, no es un ajuste general:
+     * cada máster viene grabado a una sonoridad distinta. Medido sobre el
+     * archivo, este tema tiene un RMS de -12,8 dBFS, unos 5,6 dB por encima
+     * de la versión para violín que había antes, y además roza el clipping
+     * (pico +0,8 dBFS). Con el 0,3 de entonces sonaría bastante más fuerte,
+     * no igual. En 0,11 queda unos 3 dB por debajo de aquel nivel, que es
+     * donde la música acompaña la lectura en vez de taparla.
+     *
+     * Si algún día cambias la canción, vuelve a mirar este valor.
+     */
+    volume: 0.11,
   },
 
   seo: {
