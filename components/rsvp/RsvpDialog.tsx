@@ -289,7 +289,7 @@ export function RsvpDialog({
                     ? "Gracias por confirmar, " +
                       guest.nombre.split(" ")[0] +
                       ". Guardamos un lugar para ti y no vemos la hora de celebrar juntos."
-                    : "Gracias por avisarnos con cariño. Vas a estar en nuestros pensamientos y en nuestras oraciones ese día."}
+                    : "Gracias por avisarnos. Qué lástima que no puedas asistir. Te extrañaremos ese día."}
                 </p>
                 <ActionButton variant="outline" onClick={onClose} className="mt-2">
                   Volver a la invitación
