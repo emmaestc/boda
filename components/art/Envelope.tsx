@@ -148,13 +148,18 @@ export function Envelope({
         </svg>
       </div>
 
-      {/* Cinta de raso: dos mitades que se separan al desatarse */}
+      {/*
+        Cinta de raso: dos mitades que se separan al desatarse. Terminan
+        exactamente en el canto del sobre —ni un pelo fuera—, porque una
+        cinta que asoma por los lados hace que el lazo parezca más grande
+        que la carta que envuelve.
+      */}
       {[-1, 1].map((lado) => (
         <motion.div
           key={lado}
           aria-hidden
           className="absolute top-[67%] z-[25] h-[8.5%] bg-[linear-gradient(180deg,#f0f7ff,#c2daf1_38%,#9dc0e4_62%,#6f9ac9)] shadow-[0_3px_8px_-4px_rgba(59,92,130,0.55)]"
-          style={lado < 0 ? { left: "-3%", right: "50%" } : { left: "50%", right: "-3%" }}
+          style={lado < 0 ? { left: 0, right: "50%" } : { left: "50%", right: 0 }}
           initial={false}
           animate={opened ? { x: lado * 190, opacity: 0 } : { x: 0, opacity: 1 }}
           transition={{
@@ -250,13 +255,6 @@ export function Envelope({
           </motion.span>
         ))}
 
-        {/* La grieta por donde se rompe */}
-        <motion.span
-          className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-[#8a6a30]/40"
-          initial={false}
-          animate={{ opacity: opened ? 1 : 0 }}
-          transition={{ duration: 0.15 }}
-        />
       </div>
     </motion.button>
   );
