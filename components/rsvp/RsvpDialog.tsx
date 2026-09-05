@@ -226,6 +226,18 @@ export function RsvpDialog({
       return { ...a, count: total, nombres: ajustarNombres(a.nombres, total, guest.nombre) };
     });
 
+  /*
+   * El cierre se ajusta a cuántos vienen. Con "Lorena y Miguel" decía
+   * "Gracias por confirmar, Lorena. Guardamos un lugar para ti": medio nombre
+   * y en singular, para una invitación de dos. Cuando la invitación nombra al
+   * grupo se saluda al grupo entero, porque ese nombre ya son los dos.
+   */
+  const saludoFinal = guest.cupoFijo ? guest.nombre : guest.nombre.split(" ")[0];
+  const lugaresGuardados =
+    asistentes > 1
+      ? "Guardamos sus " + asistentes + " lugares y no vemos la hora de celebrar juntos."
+      : "Guardamos un lugar para ti y no vemos la hora de celebrar juntos.";
+
   const next = () => setStep((s) => Math.min(s + 1, visibleSteps.length - 1));
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
@@ -293,9 +305,7 @@ export function RsvpDialog({
                 <Divider className="w-36 text-gold" />
                 <p className="max-w-sm font-serif text-xl leading-relaxed font-light text-ink-soft italic">
                   {answer.attending
-                    ? "Gracias por confirmar, " +
-                      guest.nombre.split(" ")[0] +
-                      ". Guardamos un lugar para ti y no vemos la hora de celebrar juntos."
+                    ? "Gracias por confirmar, " + saludoFinal + ". " + lugaresGuardados
                     : "Gracias por avisarnos. Qué lástima que no puedas asistir. Te extrañaremos ese día."}
                 </p>
                 <ActionButton variant="outline" onClick={onClose} className="mt-2">
